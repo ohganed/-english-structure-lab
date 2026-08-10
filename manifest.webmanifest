@@ -1,0 +1,16 @@
+{
+  "name": "英文構造ラボ | English Structure Lab",
+  "short_name": "英文構造ラボ",
+  "description": "英文の構造、語順、訳し方、文法を一文ずつ学ぶアプリ",
+  "lang": "ja",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f3f5f7",
+  "theme_color": "#244f77",
+  "icons": [
+    {"src":"./app-icon-180.png","sizes":"180x180","type":"image/png","purpose":"any"},
+    {"src":"./app-icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+  ]
+}
