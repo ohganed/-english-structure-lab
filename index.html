@@ -1,57 +1,2135 @@
 <!doctype html>
 <html lang="ja">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=yes"><meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#244f77"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="英文構造ラボ"><meta name="format-detection" content="telephone=no">
-<link rel="manifest" href="./manifest.webmanifest"><link rel="apple-touch-icon" sizes="180x180" href="./app-icon-180.png"><link rel="icon" type="image/png" sizes="512x512" href="./app-icon-512.png">
-<title>英文構造ラボ | English Structure Lab</title>
-<style>
-:root{--bg:#f3f5f7;--card:#fff;--ink:#18232e;--muted:#627180;--line:#d7dee5;--brand:#244f77;--soft:#e7f0f8;--focus:#ffbd3b;--s:#1569aa;--v:#b52f3d;--o:#197744;--c:#a65012;--m:#6d4b90;--fs:24px;--lh:1.85;--shadow:0 9px 28px #172b3c12}
-[data-theme=dark]{--bg:#11171d;--card:#1a232c;--ink:#edf3f8;--muted:#aab6c1;--line:#354452;--brand:#9bc9ef;--soft:#253a4c;--s:#77c0ff;--v:#ff8c99;--o:#74d69c;--c:#ffb273;--m:#c7a8e8;--shadow:none}
-*{box-sizing:border-box}html{background:var(--bg);overscroll-behavior-y:none}body{margin:0;min-height:100vh;min-height:100dvh;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;-webkit-tap-highlight-color:transparent;overscroll-behavior-y:none}button,input,textarea,select{font:inherit;color:inherit}button,.fileButton{min-height:46px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:.66rem .95rem;font-weight:700;cursor:pointer;touch-action:manipulation}button:hover,.fileButton:hover{border-color:var(--brand)}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--focus);outline-offset:3px}.primary{background:var(--brand);border-color:var(--brand);color:white}[data-theme=dark] .primary{color:#111}.ghost{background:transparent}.danger{color:#a52330}.small{min-height:38px;padding:.4rem .68rem;font-size:.88rem}.header{position:sticky;top:0;z-index:30;display:flex;justify-content:space-between;align-items:center;gap:.5rem;padding:max(.55rem,env(safe-area-inset-top)) max(1rem,env(safe-area-inset-right)) .55rem max(1rem,env(safe-area-inset-left));border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}.brand{display:flex;gap:.6rem;align-items:baseline}.brand span{font-size:.72rem;color:var(--muted)}.shell{width:min(1180px,100%);margin:auto;padding:1rem max(1rem,env(safe-area-inset-right)) calc(6rem + env(safe-area-inset-bottom)) max(1rem,env(safe-area-inset-left))}.view[hidden],.modal[hidden],.toast[hidden]{display:none!important}.hero{padding:3.2rem 0 1.7rem;max-width:790px}.eyebrow{font-size:.76rem;font-weight:800;letter-spacing:.14em;color:var(--brand)}h1,h2{font-family:Georgia,"Yu Mincho",serif}.hero h1{font-size:clamp(2.1rem,7vw,4.4rem);line-height:1.08;margin:.5rem 0}.hero p,.hint{color:var(--muted);line-height:1.75}.homeGrid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.homeAction{min-height:132px;text-align:left;padding:1.25rem;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between}.homeAction b{font-size:1.08rem}.homeAction span{color:var(--muted);font-weight:400;line-height:1.55}.installCard{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:.8rem;border:1px solid color-mix(in srgb,var(--brand) 45%,var(--line));background:linear-gradient(135deg,var(--soft),var(--card));padding:1rem;border-radius:16px;margin-bottom:1rem}.installIcon{width:52px;height:52px;border-radius:13px;display:grid;place-items:center;background:#244f77;color:white;font:700 22px Georgia,serif;box-shadow:0 5px 14px #18324725}.installCard p{margin:.18rem 0;color:var(--muted);font-size:.88rem;line-height:1.45}.sectionHead,.row{display:flex;align-items:center;gap:.65rem;flex-wrap:wrap}.sectionHead{justify-content:space-between}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:clamp(1rem,3vw,1.5rem);margin-bottom:1rem}.field{display:grid;gap:.45rem;margin-bottom:1rem}.field label{font-weight:800}textarea,input[type=text]{width:100%;border:1px solid var(--line);border-radius:12px;background:var(--bg);padding:.85rem}textarea{min-height:245px;resize:vertical;line-height:1.65}.meta{font-size:.88rem;color:var(--muted)}.spread{justify-content:space-between}.notice{border-left:4px solid var(--brand);background:var(--soft);border-radius:8px;padding:.85rem 1rem;line-height:1.65;margin:.8rem 0}.notice.error{border-color:#b52b37;background:color-mix(in srgb,#b52b37 12%,var(--card))}.steps{display:flex;gap:.35rem;overflow:auto;margin:.7rem 0 1rem}.step{white-space:nowrap;color:var(--muted);font-size:.82rem}.step.active{color:var(--brand);background:var(--soft);border-color:var(--brand)}.library{display:grid;gap:.75rem}.libraryItem{display:grid;grid-template-columns:1fr auto;gap:.7rem;align-items:center;border:1px solid var(--line);border-radius:14px;padding:1rem}.libraryItem h3{margin:0 0 .3rem}.studyTop{position:sticky;top:64px;z-index:20;background:var(--bg);padding:.5rem 0}.progress{height:6px;background:var(--line);border-radius:8px;overflow:hidden}.progress i{display:block;height:100%;background:var(--brand)}.studyGrid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);gap:1rem;align-items:start}.sentencePanel{position:sticky;top:145px}.sentence{font-family:Georgia,"Times New Roman",serif;font-size:var(--fs);line-height:var(--lh);overflow-wrap:anywhere}.pattern{font-weight:800;color:var(--brand)}.structure{display:flex;flex-wrap:wrap;gap:.28rem .38rem;align-items:end;font-family:Georgia,serif;font-size:calc(var(--fs)*.92);line-height:2}.svoc{display:inline-flex;flex-direction:column;border-bottom:3px solid currentColor;border-radius:7px;padding:.1rem .22rem;cursor:pointer}.svoc small{font-family:-apple-system,sans-serif;font-size:.58em;line-height:1.1;font-weight:900}.role-S{color:var(--s);background:color-mix(in srgb,var(--s) 10%,transparent)}.role-V{color:var(--v);background:color-mix(in srgb,var(--v) 10%,transparent)}.role-O{color:var(--o);background:color-mix(in srgb,var(--o) 10%,transparent)}.role-C{color:var(--c);background:color-mix(in srgb,var(--c) 10%,transparent)}.role-M{color:var(--m);background:color-mix(in srgb,var(--m) 10%,transparent)}.range{border:1px solid var(--line);border-radius:9px;padding:.1rem .25rem;cursor:pointer}.phrase{border-bottom:3px solid var(--m)}.clause{border-left:4px solid var(--brand);padding-left:.4rem}.highlight{outline:3px solid var(--focus);outline-offset:2px}.layers{display:flex;gap:.3rem;flex-wrap:wrap;margin:.8rem 0}.blocks{display:grid;gap:.7rem}.block{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}.block>button{width:100%;border:0;border-radius:0;background:transparent;text-align:left;display:flex;justify-content:space-between;padding:1rem}.block>button[aria-expanded=true]{background:var(--soft);color:var(--brand)}.body{padding:1rem;border-top:1px solid var(--line)}.body[hidden]{display:none}.chunk{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:.55rem 0}.chunk button{line-height:1.5;text-align:left;font-weight:500}.chunk button:first-child{font-family:Georgia,serif}.chunk.active button{outline:3px solid var(--focus)}.list{display:grid;gap:.6rem}.item{border:1px solid var(--line);border-radius:12px;padding:.78rem;line-height:1.65}.item h4{margin:0 0 .3rem}.tag{display:inline-block;border-radius:999px;background:var(--soft);color:var(--brand);font-size:.76rem;font-weight:800;padding:.2rem .5rem;margin:.1rem}.treeWrap{overflow:auto}.tree{min-width:max-content}.tree,.tree ul{list-style:none}.tree ul{margin:.35rem 0 .35rem 1rem;padding-left:1rem;border-left:2px solid var(--line)}.tree button{min-height:38px;padding:.35rem .55rem;max-width:430px;text-align:left}.settings{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}.settings label{display:grid;gap:.3rem;font-size:.88rem;font-weight:700}.bottom{display:none;position:fixed;z-index:40;left:0;right:0;bottom:0;grid-template-columns:repeat(4,1fr);gap:.3rem;padding:.4rem max(.5rem,env(safe-area-inset-right)) calc(.4rem + env(safe-area-inset-bottom)) max(.5rem,env(safe-area-inset-left));border-top:1px solid var(--line);background:color-mix(in srgb,var(--card) 94%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}.bottom button{min-height:48px;font-size:.74rem;padding:.3rem}.toast{position:fixed;z-index:100;left:50%;bottom:calc(5.7rem + env(safe-area-inset-bottom));transform:translateX(-50%);background:#142331;color:#fff;border-radius:999px;padding:.75rem 1rem;max-width:90%;text-align:center}.modal{position:fixed;inset:0;z-index:80;background:#0008;display:grid;place-items:center;padding:1rem}.modal .card{width:min(620px,100%);max-height:85vh;overflow:auto}.empty{text-align:center;padding:2rem;color:var(--muted)}.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
-@media(max-width:760px){.brand span{display:none}.homeGrid,.studyGrid{grid-template-columns:1fr}.sentencePanel{position:static}.libraryItem{grid-template-columns:1fr}.chunk{grid-template-columns:1fr}.bottom{display:grid}.hero{padding:2rem 0 1rem}.card{border-radius:14px}.studyTop{top:60px}.installCard{grid-template-columns:auto 1fr}.installCard button{grid-column:1/-1;width:100%}}
-@media(display-mode:standalone){.installCard{display:none}.header{padding-top:max(.55rem,env(safe-area-inset-top))}.shell{padding-top:.7rem}}
-@media(min-width:761px) and (max-width:1050px) and (orientation:portrait){.studyGrid{grid-template-columns:1fr}.sentencePanel{position:static}}
-@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
-</style>
-</head>
-<body>
-<header class="header"><button class="ghost small" data-go="home">英文構造ラボ</button><div class="brand"><strong>English Structure Lab</strong><span>英文を、前から構造で読む</span></div><button class="ghost small" data-go="help">使い方</button></header>
-<main class="shell" id="main">
-<section class="view" id="view-home"><div class="hero"><div class="eyebrow">READ STRUCTURE, NOT FRAGMENTS.</div><h1>英文の骨格から、<br>意味の流れをつかむ。</h1><p>SVOC、節のつながり、英語の語順、直訳から自然訳への変化を、一文ずつ落ち着いて確かめます。英文と学習記録はこの端末内だけに保存されます。</p></div><div class="installCard" id="installCard"><div class="installIcon" aria-hidden="true">ES</div><div><strong>iPhoneのホーム画面へ追加</strong><p>追加すると、Safariの枠が消えてアプリのように起動します。</p></div><button class="primary" id="showInstall">追加方法を見る</button></div><div class="homeGrid"><button class="homeAction primary" data-go="input"><b>新しい英文を解析する</b><span>英文を貼り付け、ChatGPTで教材を作ります</span></button><button class="homeAction" data-go="library"><b>保存した英文を読む</b><span>保存済み教材から選びます</span></button><button class="homeAction" id="continue"><b>前回の続きから</b><span id="continueMeta">最後に読んだ位置を開きます</span></button><button class="homeAction" data-go="help"><b>使い方</b><span>4つの手順と注意点を確認します</span></button></div></section>
-<section class="view" id="view-input" hidden><div class="sectionHead"><h1>英文を入れる</h1><button data-go="home">戻る</button></div><div class="steps"><button class="step active" disabled>1 英文を入れる</button><button class="step" disabled>2 ChatGPTで解析</button><button class="step" disabled>3 結果を戻す</button><button class="step" disabled>4 学習開始</button></div><div class="card"><div class="field"><label for="source">解析したい英文</label><textarea id="source" spellcheck="false" placeholder="ここに英文を貼り付けてください"></textarea><div class="row spread"><span class="meta" id="count">0文字・0文の目安</span><button class="small danger" id="clear">入力を消す</button></div></div><div class="row"><button class="primary" id="copy">ChatGPTで解析する文章をコピー</button><button id="sample">サンプルで試す</button></div><p class="hint">コピー後、ChatGPTの新しいチャットへ貼り付けます。返ってきた内容を次の画面へそのまま戻してください。</p></div></section>
-<section class="view" id="view-import" hidden><div class="sectionHead"><h1>解析結果を戻す</h1><button data-go="input">英文へ戻る</button></div><div class="steps"><button class="step" disabled>1 英文</button><button class="step" disabled>2 ChatGPT</button><button class="step active" disabled>3 結果を戻す</button><button class="step" disabled>4 学習開始</button></div><div class="card"><div class="field"><label for="title">教材タイトル</label><input id="title" type="text" maxlength="120"></div><div class="field"><label for="result">ChatGPTから返ってきた内容</label><textarea id="result" placeholder="ここへ貼り付けてください。前後の説明や ``` があっても探します。"></textarea></div><div class="notice" id="importNotice" hidden role="status"></div><div class="row"><button class="primary" id="check">内容を確認する</button><button id="paste">クリップボードから貼り付け</button></div></div></section>
-<section class="view" id="view-library" hidden><div class="sectionHead"><h1>保存した英文</h1><button data-go="home">戻る</button></div><div class="card"><div class="row"><label class="fileButton" for="file">教材を読み込む</label><input class="sr" id="file" type="file" accept="application/json,.json"><button id="exportAll">すべて書き出す</button><button class="danger" id="deleteAll">すべて削除</button></div><p class="hint">書き出したファイルは、バックアップや別端末への移動に使えます。</p></div><div class="library" id="library"></div></section>
-<section class="view" id="view-study" hidden><div class="studyTop"><div class="row spread"><div><strong id="studyTitle"></strong><span class="meta" id="position"></span></div><div class="row"><button class="small" id="prev">前の文</button><button class="small primary" id="next">次の文</button></div></div><div class="progress"><i id="bar"></i></div></div><div class="studyGrid"><article class="card sentencePanel"><div class="row spread"><span class="pattern" id="pattern"></span><button class="small" id="settings">表示設定</button></div><div class="sentence" id="sentence" lang="en"></div><div class="layers"><button class="small" data-layer="svoc">SVOC</button><button class="small" data-layer="phrases">語句</button><button class="small" data-layer="clauses">節</button><button class="small" data-layer="plain">原文</button></div><div id="structure"></div><div class="notice" id="selection" hidden></div></article><div class="blocks" id="blocks"></div></div></section>
-<section class="view" id="view-help" hidden><div class="sectionHead"><h1>使い方</h1><button data-go="home">戻る</button></div><div class="card list"><div class="item"><b>1　英文を入れる</b><p>ニュース、小説、教科書などの英文を貼り付けます。</p></div><div class="item"><b>2　ChatGPTで解析する</b><p>専用の指示と英文をコピーしてChatGPTへ貼り付けます。このアプリから外部送信はしません。</p></div><div class="item"><b>3　解析結果を戻す</b><p>ChatGPTの返答を貼り付けて「内容を確認する」を押します。</p></div><div class="item"><b>4　学習を始める</b><p>構造→語順理解→チャンク訳→直訳→自然訳→文法の順に開きます。</p></div></div><div class="card"><h2>色と役割</h2><p><span class="tag role-S">S 主語</span><span class="tag role-V">V 動詞</span><span class="tag role-O">O 目的語</span><span class="tag role-C">C 補語</span><span class="tag role-M">M 修飾語</span></p><p class="hint">色だけでなく文字ラベルでも区別します。解析は唯一の正解ではなく、読み方を検討するための学習材料です。</p></div></section>
-</main>
-<nav class="bottom" aria-label="主要メニュー"><button data-go="home">ホーム</button><button data-go="input">新規解析</button><button data-go="library">保存教材</button><button data-go="study" id="bottomStudy">学習</button></nav><div class="toast" id="toast" hidden role="status"></div>
-<div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="settingsTitle"><div class="card"><div class="row spread"><h2 id="settingsTitle">表示設定</h2><button id="close">閉じる</button></div><div class="settings"><label>表示モード<select id="mode"><option value="simple">シンプル</option><option value="standard">標準</option><option value="detail">詳細</option></select></label><label>文字サイズ<input id="font" type="range" min="18" max="36"></label><label>行間<input id="line" type="range" min="1.4" max="2.2" step=".05"></label><label>配色<select id="theme"><option value="auto">端末に合わせる</option><option value="light">ライト</option><option value="dark">ダーク</option></select></label></div></div></div>
-<div class="modal" id="installModal" hidden role="dialog" aria-modal="true" aria-labelledby="installTitle"><div class="card"><div class="row spread"><h2 id="installTitle">iPhoneへ追加する</h2><button id="closeInstall">閉じる</button></div><div class="list"><div class="item"><b>1　Safariで公開ページを開く</b><p>ファイルのプレビューではなく、GitHub PagesなどのHTTPSページをSafariで開きます。</p></div><div class="item"><b>2　画面下の共有ボタンを押す</b><p>四角から上向き矢印が出ているボタンです。</p></div><div class="item"><b>3　「ホーム画面に追加」を選ぶ</b><p>見つからない場合は、共有メニューを下へスクロールします。</p></div><div class="item"><b>4　右上の「追加」を押す</b><p>ホーム画面の「英文構造ラボ」から、独立したアプリのように起動できます。</p></div></div><div class="notice">最初に一度オンラインで開けば、基本画面と保存済み教材はオフラインでも利用できます。</div></div></div>
-<script>
-(()=>{'use strict';const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];const K={m:'esl.materials.v1',p:'esl.prefs.v1',l:'esl.last.v1',d:'esl.draft.v1'},MAX=2e6;const st={materials:[],id:null,index:0,layer:'svoc',prefs:{mode:'standard',font:24,line:1.85,theme:'auto'}};const str=v=>v==null?'':String(v),norm=v=>str(v).normalize('NFKC').replace(/\s+/g,' ').trim(),uid=()=>`m_${Date.now().toString(36)}_${Math.random().toString(36).slice(2,8)}`;function load(k,f){try{return JSON.parse(localStorage.getItem(k))??f}catch{return f}}function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch{msg('保存領域がいっぱいです。不要な教材を書き出して削除してください。');return false}}function msg(t){let e=$('#toast');e.textContent=t;e.hidden=false;clearTimeout(msg.t);msg.t=setTimeout(()=>e.hidden=true,2500)}function current(){return st.materials.find(x=>x.id===st.id)}function go(n){if(n==='study'&&!current()){msg('先に教材を選んでください');n='library'}$$('.view').forEach(v=>v.hidden=v.id!==`view-${n}`);if(n==='library')renderLibrary();if(n==='study')renderStudy();scrollTo({top:0,behavior:'smooth'})}function prefs(){document.documentElement.style.setProperty('--fs',st.prefs.font+'px');document.documentElement.style.setProperty('--lh',st.prefs.line);let dark=st.prefs.theme==='dark'||(st.prefs.theme==='auto'&&matchMedia('(prefers-color-scheme:dark)').matches);document.documentElement.dataset.theme=dark?'dark':'light';$('#mode').value=st.prefs.mode;$('#font').value=st.prefs.font;$('#line').value=st.prefs.line;$('#theme').value=st.prefs.theme}function cont(){let m=current();$('#continue').disabled=!m;$('#bottomStudy').disabled=!m;$('#continueMeta').textContent=m?`${m.title}・${st.index+1}文目`:'最後に読んだ教材はまだありません'}
-function range(text,item){let a=Number.isInteger(item?.start)?item.start:-1,b=Number.isInteger(item?.end)?item.end:-1;if(a<0||b<=a||text.slice(a,b)!==item.text){a=text.indexOf(str(item?.text));b=a<0?0:a+str(item.text).length}return{start:Math.max(0,a),end:Math.min(text.length,Math.max(a,b))}}function extract(raw){if(raw.length>MAX)throw Error('結果が大きすぎます。英文を分けて解析してください。');let c=raw.replace(/^\s*```(?:json)?\s*/i,'').replace(/\s*```\s*$/,'').trim();try{return JSON.parse(c)}catch{}let s=-1,d=0,q=false,e=false;for(let i=0;i<c.length;i++){let x=c[i];if(q){if(e)e=false;else if(x==='\\')e=true;else if(x==='"')q=false;continue}if(x==='"'){q=true;continue}if(x==='{'){if(!d)s=i;d++}else if(x==='}'&&d&&!--d){try{return JSON.parse(c.slice(s,i+1))}catch{s=-1}}}throw Error('解析結果の形を読み取れません。ChatGPTの返答を最初から最後までコピーし直してください。')}function wordSet(v){return new Set(norm(v).toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g)||[])}function similarity(a,b){let A=wordSet(a),B=wordSet(b),h=0;A.forEach(x=>B.has(x)&&h++);return h/Math.max(1,A.size,B.size)}function validate(d,source=''){let errors=[],warnings=[];if(!d||typeof d!=='object')errors.push('内容が空です。');if(typeof d?.originalText!=='string'||!d.originalText.trim())errors.push('元の英文がありません。');if(!Array.isArray(d?.sentences)||!d.sentences.length)errors.push('学習する文がありません。');(d?.sentences||[]).forEach((s,i)=>{if(typeof s?.text!=='string'||!s.text.trim())errors.push(`${i+1}文目の英文がありません。`);if(!Array.isArray(s.elements))warnings.push(`${i+1}文目のSVOC情報がありません。`) });if(source&&d?.originalText&&similarity(source,d.originalText)<.72)warnings.push('入力した英文と結果の英文に大きな違いがあります。');return{ok:!errors.length,errors,warnings}}function clean(d){let x=JSON.parse(JSON.stringify(d));x.schemaVersion=str(x.schemaVersion||'1.0');x.title=str(x.title||'名称未設定').slice(0,120);x.originalText=str(x.originalText).slice(0,250000);x.sentences=(x.sentences||[]).slice(0,500).map((s,i)=>({...s,id:str(s.id||`s${i+1}`),text:str(s.text),elements:Array.isArray(s.elements)?s.elements:[],phrases:Array.isArray(s.phrases)?s.phrases:[],clauses:Array.isArray(s.clauses)?s.clauses:[],chunks:Array.isArray(s.chunks)?s.chunks:[],grammarPoints:Array.isArray(s.grammarPoints)?s.grammarPoints:[],references:Array.isArray(s.references)?s.references:[],omissions:Array.isArray(s.omissions)?s.omissions:[],translationChanges:Array.isArray(s.translationChanges)?s.translationChanges:[],alternativeTranslations:Array.isArray(s.alternativeTranslations)?s.alternativeTranslations:[]}));return x}function put(data,title){let d=clean(data),fp=norm(d.originalText).toLowerCase();d.title=title||d.title;let old=st.materials.find(x=>x.fp===fp);if(old){old.data=d;old.title=d.title;old.updated=new Date().toISOString();st.id=old.id;msg('同じ英文の教材を更新しました')}else{let m={id:uid(),title:d.title,fp,data:d,updated:new Date().toISOString()};st.materials.unshift(m);st.id=m.id}st.index=0;if(!save(K.m,st.materials))return false;save(K.l,{id:st.id,index:0});cont();return true}
-function txt(p,t,c=''){let s=document.createElement('span');s.textContent=t;s.className=c;p.append(s);return s}function select(id,item){$$('[data-ref]').forEach(x=>x.classList.toggle('highlight',!!id&&x.dataset.ref===id));let n=$('#selection'),parts=[item?.label||item?.name||item?.function||item?.role,item?.text,item?.introducedBy?`導く語: ${item.introducedBy}`:'',item?.dependsOn?`依存先: ${item.dependsOn}`:''].filter(Boolean);n.textContent=parts.join('｜');n.hidden=!parts.length}function ranges(host,text,items,type){host.replaceChildren();let rs=(items||[]).map(x=>({...x,...range(text,x)})).filter(x=>x.end>x.start).sort((a,b)=>a.start-b.start||b.end-a.end);if(type==='clauses'&&rs.length>1)rs=rs.filter(x=>!(x.start===0&&x.end===text.length));let pos=0;for(let x of rs){if(x.start<pos)continue;if(x.start>pos)txt(host,text.slice(pos,x.start));let el=txt(host,text.slice(x.start,x.end),type==='svoc'?`svoc role-${x.role||'M'}`:`range ${type==='phrases'?'phrase':'clause'}`);el.dataset.ref=x.id||'';el.tabIndex=0;el.setAttribute('role','button');if(type==='svoc'){let sm=document.createElement('small');sm.textContent=`${x.role||'M'} ${x.function||''}`;el.prepend(sm)}el.onclick=()=>select(x.id,x);el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click()}};pos=x.end}if(pos<text.length)txt(host,text.slice(pos))}function layer(s){let h=$('#structure');h.className=st.layer==='svoc'?'structure':'sentence';if(st.layer==='plain'){h.textContent=s.text}else ranges(h,s.text,st.layer==='svoc'?s.elements:(s[st.layer]||[]),st.layer);$$('[data-layer]').forEach(b=>b.classList.toggle('primary',b.dataset.layer===st.layer))}
-function kv(p,k,v){if(!v)return;let q=document.createElement('p'),b=document.createElement('strong');b.textContent=k+'：';q.append(b,document.createTextNode(str(v)));p.append(q)}function block(title,key,build,open=false){let w=document.createElement('section');w.className='block';w.dataset.key=key;let b=document.createElement('button'),body=document.createElement('div'),mark=document.createElement('span');b.type='button';b.setAttribute('aria-expanded',String(open));b.textContent=title;mark.textContent=open?'−':'＋';b.append(mark);body.className='body';body.hidden=!open;b.onclick=()=>{let n=b.getAttribute('aria-expanded')!=='true';b.setAttribute('aria-expanded',String(n));mark.textContent=n?'−':'＋';body.hidden=!n};build(body);w.append(b,body);return w}function tree(n,p){if(!n)return;let li=document.createElement('li'),b=document.createElement('button');b.textContent=[n.label,n.text].filter(Boolean).join(' — ');b.dataset.ref=n.refId||n.id||'';b.onclick=()=>select(n.refId||n.id,n);li.append(b);if(n.children?.length){let ul=document.createElement('ul');n.children.forEach(x=>tree(x,ul));li.append(ul)}p.append(li)}function renderStudy(){let m=current(),ss=m?.data.sentences;if(!ss?.length)return;st.index=Math.max(0,Math.min(st.index,ss.length-1));let s=ss[st.index];$('#studyTitle').textContent=m.title;$('#position').textContent=`　${st.index+1} / ${ss.length}文`;$('#bar').style.width=`${(st.index+1)/ss.length*100}%`;$('#pattern').textContent=s.pattern?`文型 ${s.pattern}`:'文の構造';$('#sentence').textContent=s.text;$('#prev').disabled=!st.index;$('#next').disabled=st.index===ss.length-1;layer(s);let all=[],mode=st.prefs.mode;
-all.push(block('1　英文構造','structure',b=>{kv(b,'文型',s.pattern);let l=document.createElement('div');l.className='list';s.clauses.forEach(c=>{let x=document.createElement('button');x.className='item';x.dataset.ref=c.id||'';x.textContent=`${c.label||c.type}｜${c.text}${c.function?'｜'+c.function:''}`;x.onclick=()=>select(c.id,c);l.append(x)});b.append(l)},true));all.push(block('2　英語の語順に沿った理解','order',b=>s.chunks.forEach(ch=>{let p=document.createElement('div');p.className='chunk';let en=document.createElement('button'),ja=document.createElement('button');en.lang='en';en.textContent=ch.english;ja.textContent=ch.japaneseInEnglishOrder;[en,ja].forEach(x=>x.onclick=()=>{$$('.chunk').forEach(y=>y.classList.remove('active'));p.classList.add('active')});p.append(en,ja);b.append(p)})));all.push(block('3　意味のかたまりごとの訳','chunks',b=>{let l=document.createElement('div');l.className='list';s.chunks.forEach(ch=>{let d=document.createElement('div');d.className='item';kv(d,'英語',ch.english);kv(d,'働き',ch.function);kv(d,'意味',ch.meaning||ch.japaneseInEnglishOrder);kv(d,'かかる先',ch.modifiesText||ch.modifiesId);kv(d,'補足',ch.note);l.append(d)});b.append(l)}));all.push(block('4　直訳','literal',b=>{kv(b,'直訳',s.literalTranslation);let p=document.createElement('p');p.className='hint';p.textContent='英文構造との対応を優先した訳です。';b.append(p)}));all.push(block('5　自然な日本語訳','natural',b=>{kv(b,'自然訳',s.naturalTranslation);if(s.alternativeTranslations.length)kv(b,'別訳',s.alternativeTranslations.join('／'));let l=document.createElement('div');l.className='list';s.translationChanges.forEach(x=>{let d=document.createElement('div');d.className='item';kv(d,'原文',x.source);kv(d,'直訳',x.literal);kv(d,'自然な訳',x.natural);kv(d,'変えた理由',x.reason);l.append(d)});b.append(l)}));all.push(block('6　文法事項','grammar',b=>{let l=document.createElement('div');l.className='list';s.grammarPoints.forEach(g=>{let d=document.createElement('div');d.className='item';let h=document.createElement('h4');h.textContent=g.name||'文法ポイント';d.append(h);kv(d,'該当箇所',g.text);kv(d,'この文での働き',g.function);kv(d,'なぜこの形か',g.reason);kv(d,'読み方',g.readingTip);kv(d,'訳し方',g.translationTip);kv(d,'注意',g.commonMistake);kv(d,'短い例',g.example);l.append(d)});b.append(l)}));all.push(block('指示語・省略・修飾関係','refs',b=>{let l=document.createElement('div');l.className='list';s.references.forEach(r=>{let d=document.createElement('div');d.className='item';kv(d,'元の語',r.sourceText);kv(d,'指すもの・かかる先',r.targetText);kv(d,'説明',r.explanation);l.append(d)});s.omissions.forEach(o=>{let d=document.createElement('div');d.className='item';kv(d,'省略箇所',o.positionText);kv(d,'補うと',o.restoredText);kv(d,'説明',o.explanation);l.append(d)});if(!l.children.length)l.textContent='特に示す情報はありません。';b.append(l)}));all.push(block('構文ツリー','tree',b=>{let w=document.createElement('div'),u=document.createElement('ul');w.className='treeWrap';u.className='tree';tree(s.tree,u);w.append(u);b.append(w)}));let visible=mode==='simple'?['structure','literal','natural']:mode==='standard'?['structure','order','chunks','literal','natural','grammar']:null,h=$('#blocks');h.replaceChildren();all.forEach(x=>(!visible||visible.includes(x.dataset.key))&&h.append(x));save(K.l,{id:m.id,index:st.index});cont()}
-function fileSafe(s){return str(s).replace(/[\\/:*?"<>|]/g,'_').slice(0,60)||'english_material'}function download(d,n){let b=new Blob([JSON.stringify(d,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=n;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}function renderLibrary(){let h=$('#library');h.replaceChildren();if(!st.materials.length){let e=document.createElement('div');e.className='card empty';e.textContent='保存した教材はまだありません。';let b=document.createElement('button');b.textContent='サンプル教材を開く';b.onclick=openSample;e.append(document.createElement('br'),b);h.append(e);return}st.materials.forEach(m=>{let r=document.createElement('article'),i=document.createElement('div'),t=document.createElement('h3'),meta=document.createElement('div'),a=document.createElement('div');r.className='libraryItem';t.textContent=m.title;meta.className='meta';meta.textContent=`${m.data.sentences.length}文・更新 ${new Date(m.updated).toLocaleDateString('ja-JP')}`;i.append(t,meta);a.className='row';let o=document.createElement('button'),x=document.createElement('button'),del=document.createElement('button');o.className='primary';o.textContent='読む';o.onclick=()=>{st.id=m.id;st.index=load(K.l,{}).id===m.id?load(K.l,{}).index||0:0;go('study')};x.className='small';x.textContent='書き出す';x.onclick=()=>download(m.data,fileSafe(m.title)+'.json');del.className='small danger';del.textContent='削除';del.onclick=()=>{if(confirm(`「${m.title}」を削除しますか？`)){st.materials=st.materials.filter(y=>y.id!==m.id);if(st.id===m.id)st.id=null;save(K.m,st.materials);cont();renderLibrary()}};a.append(o,x,del);r.append(i,a);h.append(r)})}
-function promptFor(text){return `あなたは英語統語論・英文法・日英翻訳教育の専門家です。次の英文を日本人学習者向け教材JSONへ変換してください。\n\n【最優先】出力は有効なJSONオブジェクトだけ。Markdownコードフェンス、前置き、後書きは禁止。schemaVersionは"1.0"。元の語順、綴り、句読点、段落を変更せず、全ての文を処理する。sentence.textも原文どおり。startは各sentence.text内の0始まり、endは終了位置（文字を含まない）。ID・text・start・endを併用する。不確実な分析は断定せず、複数解釈はnoteかexplanationに示す。\n\nSVOCは節ごとに判断し、修飾語Mと主要素を区別する。句と節を区別し、関係詞の先行詞、代名詞の指示先、省略、分詞・不定詞の意味上の主語、修飾先、同格、曖昧性を示す。chunksは単語単位でなく意味のまとまりとし、英語の語順どおりの日本語を一対一対応させる。直訳と自然訳を区別し、変更理由と妥当な別訳を示す。文法は一般論でなくこの文での具体的な働きを初心者にも分かる短い日本語で説明する。treeは完全な生成文法より「何が何にかかるか」が分かる教育用とし、Sentence、Main/Subordinate Clause、Subject、Predicate、Verb、Object、Complement、Modifier、Phraseを必要に応じて含め、refIdを付ける。\n\n形：{"schemaVersion":"1.0","title":"教材名","originalText":"全文","sentences":[{"id":"s1","text":"原文の一文","pattern":"SVO","elements":[{"id":"e1","role":"S|V|O|C|M","text":"原文完全一致","start":0,"end":1,"function":"働き","clauseId":"c1"}],"phrases":[{"id":"p1","type":"noun_phrase等","label":"名詞句等","text":"原文完全一致","start":0,"end":1,"parentId":null,"modifiesId":null,"function":"働き"}],"clauses":[{"id":"c1","type":"main_clause等","label":"主節等","text":"原文完全一致","start":0,"end":1,"function":"働き","introducedBy":null,"dependsOn":null,"modifiesId":null,"omittedElement":null}],"chunks":[{"id":"ch1","english":"原文の連続部分","japaneseInEnglishOrder":"語順どおりの意味","meaning":"文脈上の意味","function":"働き","modifiesId":null,"modifiesText":null,"note":""}],"literalTranslation":"直訳","naturalTranslation":"自然訳","alternativeTranslations":[],"translationChanges":[{"source":"原文箇所","literal":"直訳","natural":"自然な表現","reason":"理由"}],"grammarPoints":[{"id":"g1","text":"該当箇所","name":"項目名","function":"働き","reason":"形の理由","readingTip":"読み方","translationTip":"訳し方","commonMistake":"注意","example":"短い例"}],"references":[{"id":"r1","sourceText":"it等","targetText":"指示対象","sourceId":null,"targetId":null,"explanation":"説明"}],"omissions":[{"id":"o1","positionText":"省略箇所","restoredText":"補う表現","explanation":"説明"}],"tree":{"id":"t1","label":"Sentence","text":"文全体","refId":"s1","children":[]}}]}\n\n<<<ORIGINAL_ENGLISH_START>>>\n${text}\n<<<ORIGINAL_ENGLISH_END>>>`}
-function sampleData(){let t='The plan, which was proposed by the committee, may help us to work more efficiently because it clarifies our priorities.',F=x=>{let i=t.indexOf(x);return{start:i,end:i+x.length}},E=(id,role,text,fn,clauseId)=>({id,role,text,...F(text),function:fn,clauseId}),P=(id,type,label,text,fn)=>({id,type,label,text,...F(text),function:fn}),C=(id,type,label,text,fn,introducedBy=null,dependsOn=null)=>({id,type,label,text,...F(text),function:fn,introducedBy,dependsOn});return{schemaVersion:'1.0',title:'サンプル：計画が仕事を助ける文',originalText:t,sentences:[{id:'s1',text:t,pattern:'SVO + 副詞節',elements:[E('e1','S','The plan','主節の主語','c1'),E('e2','M','which was proposed by the committee','The planを説明する関係詞節','c2'),E('e3','V','may help','助動詞＋動詞','c1'),E('e4','O','us','helpの目的語','c1'),E('e5','C','to work more efficiently','usが行う内容','c1'),E('e6','M','because it clarifies our priorities','理由の副詞節','c3')],phrases:[P('p1','noun_phrase','名詞句','The plan','主語'),P('p2','verb_phrase','受動態の動詞句','was proposed','関係詞節の述語'),P('p3','prepositional_phrase','前置詞句','by the committee','proposedを修飾'),P('p4','infinitive_phrase','不定詞句','to work more efficiently','usがする内容'),P('p5','noun_phrase','名詞句','our priorities','clarifiesの目的語')],clauses:[C('c1','main_clause','主節',t,'文の中心'),C('c2','relative_clause','関係詞節','which was proposed by the committee','The planを後ろから説明','which','c1'),C('c3','adverb_clause','理由の副詞節','because it clarifies our priorities','理由を示す','because','c1')],chunks:[{id:'ch1',english:'The plan',japaneseInEnglishOrder:'その計画は',meaning:'その計画',function:'主語'},{id:'ch2',english:'which was proposed by the committee',japaneseInEnglishOrder:'委員会によって提案されたのだが',meaning:'委員会が提案した',function:'関係詞節',modifiesText:'The plan'},{id:'ch3',english:'may help us',japaneseInEnglishOrder:'私たちの助けになるかもしれない',meaning:'私たちに役立つ可能性がある',function:'主節の述語'},{id:'ch4',english:'to work more efficiently',japaneseInEnglishOrder:'もっと効率よく働くのに',meaning:'より効率的に仕事をすること',function:'usがする内容'},{id:'ch5',english:'because it clarifies our priorities',japaneseInEnglishOrder:'なぜなら、それが優先事項を明確にするから',meaning:'優先順位がはっきりするため',function:'理由の副詞節',note:'itはThe planを指す'}],literalTranslation:'委員会によって提案されたその計画は、それが私たちの優先事項を明確にするので、私たちがより効率的に働くのを助けるかもしれない。',naturalTranslation:'委員会が提案したその計画によって優先順位が明確になり、私たちはより効率よく働けるかもしれない。',alternativeTranslations:['委員会の提案した計画は、優先事項を明確にし、仕事の効率化に役立つ可能性がある。'],translationChanges:[{source:'which was proposed by the committee',literal:'委員会によって提案された',natural:'委員会が提案した',reason:'受動態を能動態にすると自然だから'},{source:'because it clarifies our priorities',literal:'それが優先事項を明確にするので',natural:'優先順位が明確になり',reason:'指示対象と因果関係を自然な日本語にしたから'}],grammarPoints:[{id:'g1',text:'which was proposed by the committee',name:'関係代名詞と受動態',function:'whichがThe planを受け、計画を追加説明する。was proposedは受動態。',reason:'計画は提案される対象だから。',readingTip:'コンマ内を外すと主節が見える。',translationTip:'「委員会が提案した」と能動的に訳せる。',commonMistake:'whichを疑問詞と読まない。',example:'The book, which was written in 2020, became popular.'},{id:'g2',text:'may help us to work',name:'助動詞mayとhelp + 人 + to不定詞',function:'mayは可能性。to workはusがする行為。',reason:'効果を断定せず可能性として述べる。',readingTip:'usとto workをまとめて捉える。',translationTip:'「働けるようにする」と言い換えられる。',commonMistake:'mayを許可だけで読まない。',example:'This tool may help you to learn.'}],references:[{id:'r1',sourceText:'which',targetText:'The plan',explanation:'whichの先行詞はThe plan。'},{id:'r2',sourceText:'it',targetText:'The plan',explanation:'itはThe planを指す。'}],omissions:[],tree:{id:'t1',label:'Sentence',text:t,children:[{label:'Main Clause',text:'The plan may help us to work more efficiently',refId:'c1',children:[{label:'Subject',text:'The plan',refId:'e1',children:[{label:'Subordinate Clause (relative)',text:'which was proposed by the committee',refId:'c2'}]},{label:'Predicate',text:'may help us to work more efficiently',children:[{label:'Verb',text:'may help',refId:'e3'},{label:'Object',text:'us',refId:'e4'},{label:'Phrase (infinitive)',text:'to work more efficiently',refId:'e5'}]}]},{label:'Subordinate Clause (reason)',text:'because it clarifies our priorities',refId:'c3',children:[{label:'Subject',text:'it'},{label:'Verb',text:'clarifies'},{label:'Object',text:'our priorities'}]}]}}]}}
-function openSample(){let d=sampleData();put(d,d.title);go('study')}$$('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));$('#continue').onclick=()=>go('study');$('#sample').onclick=openSample;$('#source').oninput=e=>{if(e.target.value.length>250000)e.target.value=e.target.value.slice(0,250000);$('#count').textContent=`${e.target.value.length.toLocaleString()}文字・${e.target.value.trim()?(e.target.value.match(/[.!?](?:[”’"']|\s|$)/g)||[1]).length:0}文の目安`;save(K.d,e.target.value)};$('#clear').onclick=()=>{if(confirm('入力した英文を消しますか？')){$('#source').value='';$('#source').dispatchEvent(new Event('input'))}};$('#copy').onclick=async()=>{let t=$('#source').value.trim();if(!t)return msg('先に英文を入れてください');let p=promptFor(t),ok=false;try{await navigator.clipboard.writeText(p);ok=true}catch{let a=document.createElement('textarea');a.value=p;a.style.position='fixed';a.style.opacity=0;document.body.append(a);a.select();ok=typeof document.execCommand==='function'&&document.execCommand('copy');a.remove()}if(ok){msg('コピーしました。ChatGPTへ貼り付けてください');go('import')}else msg('自動コピーできません。入力欄の内容を手動でコピーしてください')};$('#paste').onclick=async()=>{try{$('#result').value=await navigator.clipboard.readText();msg('貼り付けました')}catch{msg('入力欄を長押しして「ペースト」を選んでください')}};$('#check').onclick=()=>{let n=$('#importNotice');n.hidden=false;n.className='notice';try{let d=extract($('#result').value),v=validate(d,$('#source').value);if(!v.ok){n.classList.add('error');n.textContent='読み込めません。'+v.errors.join(' ');return}if(v.warnings.length&&!confirm(v.warnings.join('\n')+'\n\nこのまま学習しますか？'))return;if(put(d,$('#title').value.trim()||d.title)){n.textContent='内容を確認できました。学習を始めます。';setTimeout(()=>go('study'),300)}}catch(e){n.classList.add('error');n.textContent=e.message}};$('#prev').onclick=()=>{if(st.index){st.index--;renderStudy();scrollTo({top:0})}};$('#next').onclick=()=>{if(st.index<current().data.sentences.length-1){st.index++;renderStudy();scrollTo({top:0})}};$$('[data-layer]').forEach(b=>b.onclick=()=>{st.layer=b.dataset.layer;layer(current().data.sentences[st.index])});$('#settings').onclick=()=>{$('#modal').hidden=false;$('#mode').focus()};$('#close').onclick=()=>$('#modal').hidden=true;$('#modal').onclick=e=>{if(e.target===$('#modal'))$('#close').click()};$('#mode').onchange=e=>{st.prefs.mode=e.target.value;save(K.p,st.prefs);renderStudy()};$('#font').oninput=e=>{st.prefs.font=+e.target.value;save(K.p,st.prefs);prefs()};$('#line').oninput=e=>{st.prefs.line=+e.target.value;save(K.p,st.prefs);prefs()};$('#theme').onchange=e=>{st.prefs.theme=e.target.value;save(K.p,st.prefs);prefs()};$('#exportAll').onclick=()=>st.materials.length?download({schemaVersion:'1.0',exportType:'collection',materials:st.materials.map(x=>x.data)},'english_structure_lab_backup.json'):msg('教材がありません');$('#file').onchange=async e=>{let f=e.target.files?.[0];if(!f)return;try{let o=JSON.parse(await f.text()),list=o.exportType==='collection'?o.materials:[o],c=0;for(let d of list.slice(0,80)){if(validate(d).ok&&put(d,d.title))c++}msg(`${c}件を読み込みました`);renderLibrary()}catch{msg('このファイルは読み取れませんでした')}e.target.value=''};$('#deleteAll').onclick=()=>{if(st.materials.length&&confirm('保存教材をすべて削除しますか？')&&prompt('確認のため「すべて削除」と入力してください。')==='すべて削除'){st.materials=[];st.id=null;save(K.m,[]);localStorage.removeItem(K.l);cont();renderLibrary();msg('すべて削除しました')}};addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#modal').hidden)$('#close').click()});st.materials=load(K.m,[]).filter(x=>x?.data?.sentences);st.prefs={...st.prefs,...load(K.p,{})};let last=load(K.l,{});if(st.materials.some(x=>x.id===last.id)){st.id=last.id;st.index=+last.index||0}prefs();cont();let draft=load(K.d,'');if(typeof draft==='string'){$('#source').value=draft;$('#source').dispatchEvent(new Event('input'))}go('home')})();
-</script>
-<script>
-(()=>{'use strict';
-  const installModal=document.getElementById('installModal');
-  const showInstall=document.getElementById('showInstall');
-  const closeInstall=document.getElementById('closeInstall');
-  const installCard=document.getElementById('installCard');
-  showInstall.addEventListener('click',()=>{installModal.hidden=false;closeInstall.focus()});
-  closeInstall.addEventListener('click',()=>{installModal.hidden=true;showInstall.focus()});
-  installModal.addEventListener('click',e=>{if(e.target===installModal)closeInstall.click()});
-  addEventListener('keydown',e=>{if(e.key==='Escape'&&!installModal.hidden)closeInstall.click()});
-  const standalone=navigator.standalone===true||matchMedia('(display-mode: standalone)').matches;
-  if(standalone){installCard.hidden=true;document.documentElement.classList.add('standalone')}
-  if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./service-worker.js').catch(()=>{});
-})();
-</script>
-</body></html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=yes"
+    />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#244f77" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="英文構造ラボ" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./app-icon-180.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="./app-icon-512.png"
+    />
+    <title>英文構造ラボ | English Structure Lab</title>
+    <style>
+      :root {
+        --bg: #f3f5f7;
+        --card: #fff;
+        --ink: #18232e;
+        --muted: #627180;
+        --line: #d7dee5;
+        --brand: #244f77;
+        --soft: #e7f0f8;
+        --focus: #ffbd3b;
+        --s: #1569aa;
+        --v: #b52f3d;
+        --o: #197744;
+        --c: #a65012;
+        --m: #6d4b90;
+        --fs: 24px;
+        --lh: 1.85;
+        --shadow: 0 9px 28px #172b3c12;
+      }
+      [data-theme="dark"] {
+        --bg: #11171d;
+        --card: #1a232c;
+        --ink: #edf3f8;
+        --muted: #aab6c1;
+        --line: #354452;
+        --brand: #9bc9ef;
+        --soft: #253a4c;
+        --s: #77c0ff;
+        --v: #ff8c99;
+        --o: #74d69c;
+        --c: #ffb273;
+        --m: #c7a8e8;
+        --shadow: none;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        background: var(--bg);
+        overscroll-behavior-y: none;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        min-height: 100dvh;
+        background: var(--bg);
+        color: var(--ink);
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic",
+          sans-serif;
+        -webkit-tap-highlight-color: transparent;
+        overscroll-behavior-y: none;
+      }
+      button,
+      input,
+      textarea,
+      select {
+        font: inherit;
+        color: inherit;
+      }
+      button,
+      .fileButton {
+        min-height: 46px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--card);
+        padding: 0.66rem 0.95rem;
+        font-weight: 700;
+        cursor: pointer;
+        touch-action: manipulation;
+      }
+      button:hover,
+      .fileButton:hover {
+        border-color: var(--brand);
+      }
+      button:focus-visible,
+      input:focus-visible,
+      textarea:focus-visible,
+      select:focus-visible,
+      [tabindex]:focus-visible {
+        outline: 3px solid var(--focus);
+        outline-offset: 3px;
+      }
+      .primary {
+        background: var(--brand);
+        border-color: var(--brand);
+        color: white;
+      }
+      [data-theme="dark"] .primary {
+        color: #111;
+      }
+      .ghost {
+        background: transparent;
+      }
+      .danger {
+        color: #a52330;
+      }
+      .small {
+        min-height: 38px;
+        padding: 0.4rem 0.68rem;
+        font-size: 0.88rem;
+      }
+      .header {
+        position: sticky;
+        top: 0;
+        z-index: 30;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5rem;
+        padding: max(0.55rem, env(safe-area-inset-top))
+          max(1rem, env(safe-area-inset-right)) 0.55rem
+          max(1rem, env(safe-area-inset-left));
+        border-bottom: 1px solid var(--line);
+        background: color-mix(in srgb, var(--bg) 92%, transparent);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+      .brand {
+        display: flex;
+        gap: 0.6rem;
+        align-items: baseline;
+      }
+      .brand span {
+        font-size: 0.72rem;
+        color: var(--muted);
+      }
+      .shell {
+        width: min(1180px, 100%);
+        margin: auto;
+        padding: 1rem max(1rem, env(safe-area-inset-right))
+          calc(6rem + env(safe-area-inset-bottom))
+          max(1rem, env(safe-area-inset-left));
+      }
+      .view[hidden],
+      .modal[hidden],
+      .toast[hidden] {
+        display: none !important;
+      }
+      .hero {
+        padding: 3.2rem 0 1.7rem;
+        max-width: 790px;
+      }
+      .eyebrow {
+        font-size: 0.76rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        color: var(--brand);
+      }
+      h1,
+      h2 {
+        font-family: Georgia, "Yu Mincho", serif;
+      }
+      .hero h1 {
+        font-size: clamp(2.1rem, 7vw, 4.4rem);
+        line-height: 1.08;
+        margin: 0.5rem 0;
+      }
+      .hero p,
+      .hint {
+        color: var(--muted);
+        line-height: 1.75;
+      }
+      .homeGrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+      .homeAction {
+        min-height: 132px;
+        text-align: left;
+        padding: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
+      }
+      .homeAction b {
+        font-size: 1.08rem;
+      }
+      .homeAction span {
+        color: var(--muted);
+        font-weight: 400;
+        line-height: 1.55;
+      }
+      .installCard {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 0.8rem;
+        border: 1px solid color-mix(in srgb, var(--brand) 45%, var(--line));
+        background: linear-gradient(135deg, var(--soft), var(--card));
+        padding: 1rem;
+        border-radius: 16px;
+        margin-bottom: 1rem;
+      }
+      .installIcon {
+        width: 52px;
+        height: 52px;
+        border-radius: 13px;
+        display: grid;
+        place-items: center;
+        background: #244f77;
+        color: white;
+        font:
+          700 22px Georgia,
+          serif;
+        box-shadow: 0 5px 14px #18324725;
+      }
+      .installCard p {
+        margin: 0.18rem 0;
+        color: var(--muted);
+        font-size: 0.88rem;
+        line-height: 1.45;
+      }
+      .sectionHead,
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        flex-wrap: wrap;
+      }
+      .sectionHead {
+        justify-content: space-between;
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        box-shadow: var(--shadow);
+        padding: clamp(1rem, 3vw, 1.5rem);
+        margin-bottom: 1rem;
+      }
+      .field {
+        display: grid;
+        gap: 0.45rem;
+        margin-bottom: 1rem;
+      }
+      .field label {
+        font-weight: 800;
+      }
+      textarea,
+      input[type="text"] {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--bg);
+        padding: 0.85rem;
+      }
+      textarea {
+        min-height: 245px;
+        resize: vertical;
+        line-height: 1.65;
+      }
+      .meta {
+        font-size: 0.88rem;
+        color: var(--muted);
+      }
+      .spread {
+        justify-content: space-between;
+      }
+      .notice {
+        border-left: 4px solid var(--brand);
+        background: var(--soft);
+        border-radius: 8px;
+        padding: 0.85rem 1rem;
+        line-height: 1.65;
+        margin: 0.8rem 0;
+      }
+      .notice.error {
+        border-color: #b52b37;
+        background: color-mix(in srgb, #b52b37 12%, var(--card));
+      }
+      .steps {
+        display: flex;
+        gap: 0.35rem;
+        overflow: auto;
+        margin: 0.7rem 0 1rem;
+      }
+      .step {
+        white-space: nowrap;
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+      .step.active {
+        color: var(--brand);
+        background: var(--soft);
+        border-color: var(--brand);
+      }
+      .library {
+        display: grid;
+        gap: 0.75rem;
+      }
+      .libraryItem {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 0.7rem;
+        align-items: center;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 1rem;
+      }
+      .libraryItem h3 {
+        margin: 0 0 0.3rem;
+      }
+      .studyTop {
+        position: sticky;
+        top: 64px;
+        z-index: 20;
+        background: var(--bg);
+        padding: 0.5rem 0;
+      }
+      .progress {
+        height: 6px;
+        background: var(--line);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .progress i {
+        display: block;
+        height: 100%;
+        background: var(--brand);
+      }
+      .studyGrid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+        gap: 1rem;
+        align-items: start;
+      }
+      .sentencePanel {
+        position: sticky;
+        top: 145px;
+      }
+      .sentence {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: var(--fs);
+        line-height: var(--lh);
+        overflow-wrap: anywhere;
+      }
+      .pattern {
+        font-weight: 800;
+        color: var(--brand);
+      }
+      .structure {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.28rem 0.38rem;
+        align-items: end;
+        font-family: Georgia, serif;
+        font-size: calc(var(--fs) * 0.92);
+        line-height: 2;
+      }
+      .svoc {
+        display: inline-flex;
+        flex-direction: column;
+        border-bottom: 3px solid currentColor;
+        border-radius: 7px;
+        padding: 0.1rem 0.22rem;
+        cursor: pointer;
+      }
+      .svoc small {
+        font-family: -apple-system, sans-serif;
+        font-size: 0.58em;
+        line-height: 1.1;
+        font-weight: 900;
+      }
+      .role-S {
+        color: var(--s);
+        background: color-mix(in srgb, var(--s) 10%, transparent);
+      }
+      .role-V {
+        color: var(--v);
+        background: color-mix(in srgb, var(--v) 10%, transparent);
+      }
+      .role-O {
+        color: var(--o);
+        background: color-mix(in srgb, var(--o) 10%, transparent);
+      }
+      .role-C {
+        color: var(--c);
+        background: color-mix(in srgb, var(--c) 10%, transparent);
+      }
+      .role-M {
+        color: var(--m);
+        background: color-mix(in srgb, var(--m) 10%, transparent);
+      }
+      .range {
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        padding: 0.1rem 0.25rem;
+        cursor: pointer;
+      }
+      .phrase {
+        border-bottom: 3px solid var(--m);
+      }
+      .clause {
+        border-left: 4px solid var(--brand);
+        padding-left: 0.4rem;
+      }
+      .highlight {
+        outline: 3px solid var(--focus);
+        outline-offset: 2px;
+      }
+      .layers {
+        display: flex;
+        gap: 0.3rem;
+        flex-wrap: wrap;
+        margin: 0.8rem 0;
+      }
+      .blocks {
+        display: grid;
+        gap: 0.7rem;
+      }
+      .block {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        overflow: hidden;
+      }
+      .block > button {
+        width: 100%;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        text-align: left;
+        display: flex;
+        justify-content: space-between;
+        padding: 1rem;
+      }
+      .block > button[aria-expanded="true"] {
+        background: var(--soft);
+        color: var(--brand);
+      }
+      .body {
+        padding: 1rem;
+        border-top: 1px solid var(--line);
+      }
+      .body[hidden] {
+        display: none;
+      }
+      .chunk {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+        margin: 0.55rem 0;
+      }
+      .chunk button {
+        line-height: 1.5;
+        text-align: left;
+        font-weight: 500;
+      }
+      .chunk button:first-child {
+        font-family: Georgia, serif;
+      }
+      .chunk.active button {
+        outline: 3px solid var(--focus);
+      }
+      .list {
+        display: grid;
+        gap: 0.6rem;
+      }
+      .item {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 0.78rem;
+        line-height: 1.65;
+      }
+      .item h4 {
+        margin: 0 0 0.3rem;
+      }
+      .tag {
+        display: inline-block;
+        border-radius: 999px;
+        background: var(--soft);
+        color: var(--brand);
+        font-size: 0.76rem;
+        font-weight: 800;
+        padding: 0.2rem 0.5rem;
+        margin: 0.1rem;
+      }
+      .treeWrap {
+        overflow: auto;
+      }
+      .tree {
+        min-width: max-content;
+      }
+      .tree,
+      .tree ul {
+        list-style: none;
+      }
+      .tree ul {
+        margin: 0.35rem 0 0.35rem 1rem;
+        padding-left: 1rem;
+        border-left: 2px solid var(--line);
+      }
+      .tree button {
+        min-height: 38px;
+        padding: 0.35rem 0.55rem;
+        max-width: 430px;
+        text-align: left;
+      }
+      .settings {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.8rem;
+      }
+      .settings label {
+        display: grid;
+        gap: 0.3rem;
+        font-size: 0.88rem;
+        font-weight: 700;
+      }
+      .bottom {
+        display: none;
+        position: fixed;
+        z-index: 40;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.3rem;
+        padding: 0.4rem max(0.5rem, env(safe-area-inset-right))
+          calc(0.4rem + env(safe-area-inset-bottom))
+          max(0.5rem, env(safe-area-inset-left));
+        border-top: 1px solid var(--line);
+        background: color-mix(in srgb, var(--card) 94%, transparent);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+      .bottom button {
+        min-height: 48px;
+        font-size: 0.74rem;
+        padding: 0.3rem;
+      }
+      .toast {
+        position: fixed;
+        z-index: 100;
+        left: 50%;
+        bottom: calc(5.7rem + env(safe-area-inset-bottom));
+        transform: translateX(-50%);
+        background: #142331;
+        color: #fff;
+        border-radius: 999px;
+        padding: 0.75rem 1rem;
+        max-width: 90%;
+        text-align: center;
+      }
+      .modal {
+        position: fixed;
+        inset: 0;
+        z-index: 80;
+        background: #0008;
+        display: grid;
+        place-items: center;
+        padding: 1rem;
+      }
+      .modal .card {
+        width: min(620px, 100%);
+        max-height: 85vh;
+        overflow: auto;
+      }
+      .empty {
+        text-align: center;
+        padding: 2rem;
+        color: var(--muted);
+      }
+      .sr {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+      }
+      @media (max-width: 760px) {
+        .brand span {
+          display: none;
+        }
+        .homeGrid,
+        .studyGrid {
+          grid-template-columns: 1fr;
+        }
+        .sentencePanel {
+          position: static;
+        }
+        .libraryItem {
+          grid-template-columns: 1fr;
+        }
+        .chunk {
+          grid-template-columns: 1fr;
+        }
+        .bottom {
+          display: grid;
+        }
+        .hero {
+          padding: 2rem 0 1rem;
+        }
+        .card {
+          border-radius: 14px;
+        }
+        .studyTop {
+          top: 60px;
+        }
+        .installCard {
+          grid-template-columns: auto 1fr;
+        }
+        .installCard button {
+          grid-column: 1/-1;
+          width: 100%;
+        }
+      }
+      @media (display-mode: standalone) {
+        .installCard {
+          display: none;
+        }
+        .header {
+          padding-top: max(0.55rem, env(safe-area-inset-top));
+        }
+        .shell {
+          padding-top: 0.7rem;
+        }
+      }
+      @media (min-width: 761px) and (max-width: 1050px) and (orientation: portrait) {
+        .studyGrid {
+          grid-template-columns: 1fr;
+        }
+        .sentencePanel {
+          position: static;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          scroll-behavior: auto !important;
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <button class="ghost small" data-go="home">英文構造ラボ</button>
+      <div class="brand">
+        <strong>English Structure Lab</strong
+        ><span>英文を、前から構造で読む</span>
+      </div>
+      <button class="ghost small" data-go="help">使い方</button>
+    </header>
+    <main class="shell" id="main">
+      <section class="view" id="view-home">
+        <div class="hero">
+          <div class="eyebrow">READ STRUCTURE, NOT FRAGMENTS.</div>
+          <h1>英文の骨格から、<br />意味の流れをつかむ。</h1>
+          <p>
+            SVOC、節のつながり、英語の語順、直訳から自然訳への変化を、一文ずつ落ち着いて確かめます。英文と学習記録はこの端末内だけに保存されます。
+          </p>
+        </div>
+        <div class="installCard" id="installCard">
+          <div class="installIcon" aria-hidden="true">ES</div>
+          <div>
+            <strong>iPhoneのホーム画面へ追加</strong>
+            <p>追加すると、Safariの枠が消えてアプリのように起動します。</p>
+          </div>
+          <button class="primary" id="showInstall">追加方法を見る</button>
+        </div>
+        <div class="homeGrid">
+          <button class="homeAction primary" data-go="input">
+            <b>新しい英文を解析する</b
+            ><span>英文を貼り付け、ChatGPTで教材を作ります</span></button
+          ><button class="homeAction" data-go="library">
+            <b>保存した英文を読む</b
+            ><span>保存済み教材から選びます</span></button
+          ><button class="homeAction" id="continue">
+            <b>前回の続きから</b
+            ><span id="continueMeta">最後に読んだ位置を開きます</span></button
+          ><button class="homeAction" data-go="help">
+            <b>使い方</b><span>4つの手順と注意点を確認します</span>
+          </button>
+        </div>
+      </section>
+      <section class="view" id="view-input" hidden>
+        <div class="sectionHead">
+          <h1>英文を入れる</h1>
+          <button data-go="home">戻る</button>
+        </div>
+        <div class="steps">
+          <button class="step active" disabled>1 英文を入れる</button
+          ><button class="step" disabled>2 ChatGPTで解析</button
+          ><button class="step" disabled>3 結果を戻す</button
+          ><button class="step" disabled>4 学習開始</button>
+        </div>
+        <div class="card">
+          <div class="field">
+            <label for="source">解析したい英文</label
+            ><textarea
+              id="source"
+              spellcheck="false"
+              placeholder="ここに英文を貼り付けてください"
+            ></textarea>
+            <div class="row spread">
+              <span class="meta" id="count">0文字・0文の目安</span
+              ><button class="small danger" id="clear">入力を消す</button>
+            </div>
+          </div>
+          <div class="row">
+            <button class="primary" id="copy">
+              ChatGPTで解析する文章をコピー</button
+            ><button id="sample">サンプルで試す</button>
+          </div>
+          <p class="hint">
+            コピー後、ChatGPTの新しいチャットへ貼り付けます。返ってきた内容を次の画面へそのまま戻してください。
+          </p>
+        </div>
+      </section>
+      <section class="view" id="view-import" hidden>
+        <div class="sectionHead">
+          <h1>解析結果を戻す</h1>
+          <button data-go="input">英文へ戻る</button>
+        </div>
+        <div class="steps">
+          <button class="step" disabled>1 英文</button
+          ><button class="step" disabled>2 ChatGPT</button
+          ><button class="step active" disabled>3 結果を戻す</button
+          ><button class="step" disabled>4 学習開始</button>
+        </div>
+        <div class="card">
+          <div class="field">
+            <label for="title">教材タイトル</label
+            ><input id="title" type="text" maxlength="120" />
+          </div>
+          <div class="field">
+            <label for="result">ChatGPTから返ってきた内容</label
+            ><textarea
+              id="result"
+              placeholder="ここへ貼り付けてください。前後の説明や ``` があっても探します。"
+            ></textarea>
+          </div>
+          <div class="notice" id="importNotice" hidden role="status"></div>
+          <div class="row">
+            <button class="primary" id="check">内容を確認する</button
+            ><button id="paste">クリップボードから貼り付け</button>
+          </div>
+        </div>
+      </section>
+      <section class="view" id="view-library" hidden>
+        <div class="sectionHead">
+          <h1>保存した英文</h1>
+          <button data-go="home">戻る</button>
+        </div>
+        <div class="card">
+          <div class="row">
+            <label class="fileButton" for="file">教材を読み込む</label
+            ><input
+              class="sr"
+              id="file"
+              type="file"
+              accept="application/json,.json"
+            /><button id="exportAll">すべて書き出す</button
+            ><button class="danger" id="deleteAll">すべて削除</button>
+          </div>
+          <p class="hint">
+            書き出したファイルは、バックアップや別端末への移動に使えます。
+          </p>
+        </div>
+        <div class="library" id="library"></div>
+      </section>
+      <section class="view" id="view-study" hidden>
+        <div class="studyTop">
+          <div class="row spread">
+            <div>
+              <strong id="studyTitle"></strong
+              ><span class="meta" id="position"></span>
+            </div>
+            <div class="row">
+              <button class="small" id="prev">前の文</button
+              ><button class="small primary" id="next">次の文</button>
+            </div>
+          </div>
+          <div class="progress"><i id="bar"></i></div>
+        </div>
+        <div class="studyGrid">
+          <article class="card sentencePanel">
+            <div class="row spread">
+              <span class="pattern" id="pattern"></span
+              ><button class="small" id="settings">表示設定</button>
+            </div>
+            <div class="sentence" id="sentence" lang="en"></div>
+            <div class="layers">
+              <button class="small" data-layer="svoc">SVOC</button
+              ><button class="small" data-layer="phrases">語句</button
+              ><button class="small" data-layer="clauses">節</button
+              ><button class="small" data-layer="plain">原文</button>
+            </div>
+            <div id="structure"></div>
+            <div class="notice" id="selection" hidden></div>
+          </article>
+          <div class="blocks" id="blocks"></div>
+        </div>
+      </section>
+      <section class="view" id="view-help" hidden>
+        <div class="sectionHead">
+          <h1>使い方</h1>
+          <button data-go="home">戻る</button>
+        </div>
+        <div class="card list">
+          <div class="item">
+            <b>1　英文を入れる</b>
+            <p>ニュース、小説、教科書などの英文を貼り付けます。</p>
+          </div>
+          <div class="item">
+            <b>2　ChatGPTで解析する</b>
+            <p>
+              専用の指示と英文をコピーしてChatGPTへ貼り付けます。このアプリから外部送信はしません。
+            </p>
+          </div>
+          <div class="item">
+            <b>3　解析結果を戻す</b>
+            <p>ChatGPTの返答を貼り付けて「内容を確認する」を押します。</p>
+          </div>
+          <div class="item">
+            <b>4　学習を始める</b>
+            <p>構造→語順理解→チャンク訳→直訳→自然訳→文法の順に開きます。</p>
+          </div>
+        </div>
+        <div class="card">
+          <h2>色と役割</h2>
+          <p>
+            <span class="tag role-S">S 主語</span
+            ><span class="tag role-V">V 動詞</span
+            ><span class="tag role-O">O 目的語</span
+            ><span class="tag role-C">C 補語</span
+            ><span class="tag role-M">M 修飾語</span>
+          </p>
+          <p class="hint">
+            色だけでなく文字ラベルでも区別します。解析は唯一の正解ではなく、読み方を検討するための学習材料です。
+          </p>
+        </div>
+      </section>
+    </main>
+    <nav class="bottom" aria-label="主要メニュー">
+      <button data-go="home">ホーム</button
+      ><button data-go="input">新規解析</button
+      ><button data-go="library">保存教材</button
+      ><button data-go="study" id="bottomStudy">学習</button>
+    </nav>
+    <div class="toast" id="toast" hidden role="status"></div>
+    <div
+      class="modal"
+      id="modal"
+      hidden
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="settingsTitle"
+    >
+      <div class="card">
+        <div class="row spread">
+          <h2 id="settingsTitle">表示設定</h2>
+          <button id="close">閉じる</button>
+        </div>
+        <div class="settings">
+          <label
+            >表示モード<select id="mode">
+              <option value="simple">シンプル</option>
+              <option value="standard">標準</option>
+              <option value="detail">詳細</option>
+            </select></label
+          ><label
+            >文字サイズ<input id="font" type="range" min="18" max="36" /></label
+          ><label
+            >行間<input
+              id="line"
+              type="range"
+              min="1.4"
+              max="2.2"
+              step=".05" /></label
+          ><label
+            >配色<select id="theme">
+              <option value="auto">端末に合わせる</option>
+              <option value="light">ライト</option>
+              <option value="dark">ダーク</option>
+            </select></label
+          >
+        </div>
+      </div>
+    </div>
+    <div
+      class="modal"
+      id="installModal"
+      hidden
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="installTitle"
+    >
+      <div class="card">
+        <div class="row spread">
+          <h2 id="installTitle">iPhoneへ追加する</h2>
+          <button id="closeInstall">閉じる</button>
+        </div>
+        <div class="list">
+          <div class="item">
+            <b>1　Safariで公開ページを開く</b>
+            <p>
+              ファイルのプレビューではなく、GitHub
+              PagesなどのHTTPSページをSafariで開きます。
+            </p>
+          </div>
+          <div class="item">
+            <b>2　画面下の共有ボタンを押す</b>
+            <p>四角から上向き矢印が出ているボタンです。</p>
+          </div>
+          <div class="item">
+            <b>3　「ホーム画面に追加」を選ぶ</b>
+            <p>見つからない場合は、共有メニューを下へスクロールします。</p>
+          </div>
+          <div class="item">
+            <b>4　右上の「追加」を押す</b>
+            <p>
+              ホーム画面の「英文構造ラボ」から、独立したアプリのように起動できます。
+            </p>
+          </div>
+        </div>
+        <div class="notice">
+          最初に一度オンラインで開けば、基本画面と保存済み教材はオフラインでも利用できます。
+        </div>
+      </div>
+    </div>
+    <script>
+      (() => {
+        "use strict";
+        const $ = (s) => document.querySelector(s),
+          $$ = (s) => [...document.querySelectorAll(s)];
+        const K = {
+            m: "esl.materials.v1",
+            p: "esl.prefs.v1",
+            l: "esl.last.v1",
+            d: "esl.draft.v1",
+          },
+          MAX = 2e6;
+        const st = {
+          materials: [],
+          id: null,
+          index: 0,
+          layer: "svoc",
+          prefs: { mode: "standard", font: 24, line: 1.85, theme: "auto" },
+        };
+        const str = (v) => (v == null ? "" : String(v)),
+          norm = (v) => str(v).normalize("NFKC").replace(/\s+/g, " ").trim(),
+          uid = () =>
+            `m_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+        function load(k, f) {
+          try {
+            return JSON.parse(localStorage.getItem(k)) ?? f;
+          } catch {
+            return f;
+          }
+        }
+        function save(k, v) {
+          try {
+            localStorage.setItem(k, JSON.stringify(v));
+            return true;
+          } catch {
+            msg(
+              "保存領域がいっぱいです。不要な教材を書き出して削除してください。",
+            );
+            return false;
+          }
+        }
+        function msg(t) {
+          let e = $("#toast");
+          e.textContent = t;
+          e.hidden = false;
+          clearTimeout(msg.t);
+          msg.t = setTimeout(() => (e.hidden = true), 2500);
+        }
+        function current() {
+          return st.materials.find((x) => x.id === st.id);
+        }
+        function go(n) {
+          if (n === "study" && !current()) {
+            msg("先に教材を選んでください");
+            n = "library";
+          }
+          $$(".view").forEach((v) => (v.hidden = v.id !== `view-${n}`));
+          if (n === "library") renderLibrary();
+          if (n === "study") renderStudy();
+          scrollTo({ top: 0, behavior: "smooth" });
+        }
+        function prefs() {
+          document.documentElement.style.setProperty(
+            "--fs",
+            st.prefs.font + "px",
+          );
+          document.documentElement.style.setProperty("--lh", st.prefs.line);
+          let dark =
+            st.prefs.theme === "dark" ||
+            (st.prefs.theme === "auto" &&
+              matchMedia("(prefers-color-scheme:dark)").matches);
+          document.documentElement.dataset.theme = dark ? "dark" : "light";
+          $("#mode").value = st.prefs.mode;
+          $("#font").value = st.prefs.font;
+          $("#line").value = st.prefs.line;
+          $("#theme").value = st.prefs.theme;
+        }
+        function cont() {
+          let m = current();
+          $("#continue").disabled = !m;
+          $("#bottomStudy").disabled = !m;
+          $("#continueMeta").textContent = m
+            ? `${m.title}・${st.index + 1}文目`
+            : "最後に読んだ教材はまだありません";
+        }
+        function range(text, item) {
+          let a = Number.isInteger(item?.start) ? item.start : -1,
+            b = Number.isInteger(item?.end) ? item.end : -1;
+          if (a < 0 || b <= a || text.slice(a, b) !== item.text) {
+            a = text.indexOf(str(item?.text));
+            b = a < 0 ? 0 : a + str(item.text).length;
+          }
+          return {
+            start: Math.max(0, a),
+            end: Math.min(text.length, Math.max(a, b)),
+          };
+        }
+        function repairJsonQuotes(text) {
+          let result = "",
+            inString = false,
+            escaped = false;
+          for (let i = 0; i < text.length; i++) {
+            const char = text[i];
+            if (!inString && /[“”＂]/.test(char)) {
+              result += '"';
+              inString = true;
+              continue;
+            }
+            if (inString) {
+              if (escaped) {
+                result += char;
+                escaped = false;
+                continue;
+              }
+              if (char === "\\") {
+                result += char;
+                escaped = true;
+                continue;
+              }
+              if (char === '"') {
+                result += char;
+                inString = false;
+                continue;
+              }
+              if (/[”＂]/.test(char)) {
+                const next = text.slice(i + 1).match(/\S/)?.[0];
+                if (!next || /[:,}\]]/.test(next)) {
+                  result += '"';
+                  inString = false;
+                  continue;
+                }
+              }
+            }
+            result += char;
+          }
+          return result;
+        }
+        function extract(raw) {
+          if (raw.length > MAX)
+            throw Error("結果が大きすぎます。英文を分けて解析してください。");
+          let c = raw
+            .replace(/^\s*```(?:json)?\s*/i, "")
+            .replace(/\s*```\s*$/, "")
+            .trim();
+          try {
+            return JSON.parse(c);
+          } catch {}
+          const repaired = repairJsonQuotes(c);
+          if (repaired !== c) {
+            try {
+              return JSON.parse(repaired);
+            } catch {}
+            c = repaired;
+          }
+          let s = -1,
+            d = 0,
+            q = false,
+            e = false;
+          for (let i = 0; i < c.length; i++) {
+            let x = c[i];
+            if (q) {
+              if (e) e = false;
+              else if (x === "\\") e = true;
+              else if (x === '"') q = false;
+              continue;
+            }
+            if (x === '"') {
+              q = true;
+              continue;
+            }
+            if (x === "{") {
+              if (!d) s = i;
+              d++;
+            } else if (x === "}" && d && !--d) {
+              try {
+                return JSON.parse(c.slice(s, i + 1));
+              } catch {
+                s = -1;
+              }
+            }
+          }
+          throw Error(
+            "解析結果の形を読み取れません。返答が途中で切れていないか確認してください。",
+          );
+        }
+        function wordSet(v) {
+          return new Set(
+            norm(v)
+              .toLowerCase()
+              .match(/[a-z]+(?:'[a-z]+)?/g) || [],
+          );
+        }
+        function similarity(a, b) {
+          let A = wordSet(a),
+            B = wordSet(b),
+            h = 0;
+          A.forEach((x) => B.has(x) && h++);
+          return h / Math.max(1, A.size, B.size);
+        }
+        function validate(d, source = "") {
+          let errors = [],
+            warnings = [];
+          if (!d || typeof d !== "object") errors.push("内容が空です。");
+          if (typeof d?.originalText !== "string" || !d.originalText.trim())
+            errors.push("元の英文がありません。");
+          if (!Array.isArray(d?.sentences) || !d.sentences.length)
+            errors.push("学習する文がありません。");
+          (d?.sentences || []).forEach((s, i) => {
+            if (typeof s?.text !== "string" || !s.text.trim())
+              errors.push(`${i + 1}文目の英文がありません。`);
+            if (!Array.isArray(s.elements))
+              warnings.push(`${i + 1}文目のSVOC情報がありません。`);
+          });
+          if (
+            source &&
+            d?.originalText &&
+            similarity(source, d.originalText) < 0.72
+          )
+            warnings.push("入力した英文と結果の英文に大きな違いがあります。");
+          return { ok: !errors.length, errors, warnings };
+        }
+        function clean(d) {
+          let x = JSON.parse(JSON.stringify(d));
+          x.schemaVersion = str(x.schemaVersion || "1.0");
+          x.title = str(x.title || "名称未設定").slice(0, 120);
+          x.originalText = str(x.originalText).slice(0, 250000);
+          x.sentences = (x.sentences || [])
+            .slice(0, 500)
+            .map((s, i) => ({
+              ...s,
+              id: str(s.id || `s${i + 1}`),
+              text: str(s.text),
+              elements: Array.isArray(s.elements) ? s.elements : [],
+              phrases: Array.isArray(s.phrases) ? s.phrases : [],
+              clauses: Array.isArray(s.clauses) ? s.clauses : [],
+              chunks: Array.isArray(s.chunks) ? s.chunks : [],
+              grammarPoints: Array.isArray(s.grammarPoints)
+                ? s.grammarPoints
+                : [],
+              references: Array.isArray(s.references) ? s.references : [],
+              omissions: Array.isArray(s.omissions) ? s.omissions : [],
+              translationChanges: Array.isArray(s.translationChanges)
+                ? s.translationChanges
+                : [],
+              alternativeTranslations: Array.isArray(s.alternativeTranslations)
+                ? s.alternativeTranslations
+                : [],
+            }));
+          return x;
+        }
+        function put(data, title) {
+          let d = clean(data),
+            fp = norm(d.originalText).toLowerCase();
+          d.title = title || d.title;
+          let old = st.materials.find((x) => x.fp === fp);
+          if (old) {
+            old.data = d;
+            old.title = d.title;
+            old.updated = new Date().toISOString();
+            st.id = old.id;
+            msg("同じ英文の教材を更新しました");
+          } else {
+            let m = {
+              id: uid(),
+              title: d.title,
+              fp,
+              data: d,
+              updated: new Date().toISOString(),
+            };
+            st.materials.unshift(m);
+            st.id = m.id;
+          }
+          st.index = 0;
+          if (!save(K.m, st.materials)) return false;
+          save(K.l, { id: st.id, index: 0 });
+          cont();
+          return true;
+        }
+        function txt(p, t, c = "") {
+          let s = document.createElement("span");
+          s.textContent = t;
+          s.className = c;
+          p.append(s);
+          return s;
+        }
+        function select(id, item) {
+          $$("[data-ref]").forEach((x) =>
+            x.classList.toggle("highlight", !!id && x.dataset.ref === id),
+          );
+          let n = $("#selection"),
+            parts = [
+              item?.label || item?.name || item?.function || item?.role,
+              item?.text,
+              item?.introducedBy ? `導く語: ${item.introducedBy}` : "",
+              item?.dependsOn ? `依存先: ${item.dependsOn}` : "",
+            ].filter(Boolean);
+          n.textContent = parts.join("｜");
+          n.hidden = !parts.length;
+        }
+        function ranges(host, text, items, type) {
+          host.replaceChildren();
+          let rs = (items || [])
+            .map((x) => ({ ...x, ...range(text, x) }))
+            .filter((x) => x.end > x.start)
+            .sort((a, b) => a.start - b.start || b.end - a.end);
+          if (type === "clauses" && rs.length > 1)
+            rs = rs.filter((x) => !(x.start === 0 && x.end === text.length));
+          let pos = 0;
+          for (let x of rs) {
+            if (x.start < pos) continue;
+            if (x.start > pos) txt(host, text.slice(pos, x.start));
+            let el = txt(
+              host,
+              text.slice(x.start, x.end),
+              type === "svoc"
+                ? `svoc role-${x.role || "M"}`
+                : `range ${type === "phrases" ? "phrase" : "clause"}`,
+            );
+            el.dataset.ref = x.id || "";
+            el.tabIndex = 0;
+            el.setAttribute("role", "button");
+            if (type === "svoc") {
+              let sm = document.createElement("small");
+              sm.textContent = `${x.role || "M"} ${x.function || ""}`;
+              el.prepend(sm);
+            }
+            el.onclick = () => select(x.id, x);
+            el.onkeydown = (e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                el.click();
+              }
+            };
+            pos = x.end;
+          }
+          if (pos < text.length) txt(host, text.slice(pos));
+        }
+        function layer(s) {
+          let h = $("#structure");
+          h.className = st.layer === "svoc" ? "structure" : "sentence";
+          if (st.layer === "plain") {
+            h.textContent = s.text;
+          } else
+            ranges(
+              h,
+              s.text,
+              st.layer === "svoc" ? s.elements : s[st.layer] || [],
+              st.layer,
+            );
+          $$("[data-layer]").forEach((b) =>
+            b.classList.toggle("primary", b.dataset.layer === st.layer),
+          );
+        }
+        function kv(p, k, v) {
+          if (!v) return;
+          let q = document.createElement("p"),
+            b = document.createElement("strong");
+          b.textContent = k + "：";
+          q.append(b, document.createTextNode(str(v)));
+          p.append(q);
+        }
+        function block(title, key, build, open = false) {
+          let w = document.createElement("section");
+          w.className = "block";
+          w.dataset.key = key;
+          let b = document.createElement("button"),
+            body = document.createElement("div"),
+            mark = document.createElement("span");
+          b.type = "button";
+          b.setAttribute("aria-expanded", String(open));
+          b.textContent = title;
+          mark.textContent = open ? "−" : "＋";
+          b.append(mark);
+          body.className = "body";
+          body.hidden = !open;
+          b.onclick = () => {
+            let n = b.getAttribute("aria-expanded") !== "true";
+            b.setAttribute("aria-expanded", String(n));
+            mark.textContent = n ? "−" : "＋";
+            body.hidden = !n;
+          };
+          build(body);
+          w.append(b, body);
+          return w;
+        }
+        function tree(n, p) {
+          if (!n) return;
+          let li = document.createElement("li"),
+            b = document.createElement("button");
+          b.textContent = [n.label, n.text].filter(Boolean).join(" — ");
+          b.dataset.ref = n.refId || n.id || "";
+          b.onclick = () => select(n.refId || n.id, n);
+          li.append(b);
+          if (n.children?.length) {
+            let ul = document.createElement("ul");
+            n.children.forEach((x) => tree(x, ul));
+            li.append(ul);
+          }
+          p.append(li);
+        }
+        function renderStudy() {
+          let m = current(),
+            ss = m?.data.sentences;
+          if (!ss?.length) return;
+          st.index = Math.max(0, Math.min(st.index, ss.length - 1));
+          let s = ss[st.index];
+          $("#studyTitle").textContent = m.title;
+          $("#position").textContent = `　${st.index + 1} / ${ss.length}文`;
+          $("#bar").style.width = `${((st.index + 1) / ss.length) * 100}%`;
+          $("#pattern").textContent = s.pattern
+            ? `文型 ${s.pattern}`
+            : "文の構造";
+          $("#sentence").textContent = s.text;
+          $("#prev").disabled = !st.index;
+          $("#next").disabled = st.index === ss.length - 1;
+          layer(s);
+          let all = [],
+            mode = st.prefs.mode;
+          all.push(
+            block(
+              "1　英文構造",
+              "structure",
+              (b) => {
+                kv(b, "文型", s.pattern);
+                let l = document.createElement("div");
+                l.className = "list";
+                s.clauses.forEach((c) => {
+                  let x = document.createElement("button");
+                  x.className = "item";
+                  x.dataset.ref = c.id || "";
+                  x.textContent = `${c.label || c.type}｜${c.text}${c.function ? "｜" + c.function : ""}`;
+                  x.onclick = () => select(c.id, c);
+                  l.append(x);
+                });
+                b.append(l);
+              },
+              true,
+            ),
+          );
+          all.push(
+            block("2　英語の語順に沿った理解", "order", (b) =>
+              s.chunks.forEach((ch) => {
+                let p = document.createElement("div");
+                p.className = "chunk";
+                let en = document.createElement("button"),
+                  ja = document.createElement("button");
+                en.lang = "en";
+                en.textContent = ch.english;
+                ja.textContent = ch.japaneseInEnglishOrder;
+                [en, ja].forEach(
+                  (x) =>
+                    (x.onclick = () => {
+                      $$(".chunk").forEach((y) => y.classList.remove("active"));
+                      p.classList.add("active");
+                    }),
+                );
+                p.append(en, ja);
+                b.append(p);
+              }),
+            ),
+          );
+          all.push(
+            block("3　意味のかたまりごとの訳", "chunks", (b) => {
+              let l = document.createElement("div");
+              l.className = "list";
+              s.chunks.forEach((ch) => {
+                let d = document.createElement("div");
+                d.className = "item";
+                kv(d, "英語", ch.english);
+                kv(d, "働き", ch.function);
+                kv(d, "意味", ch.meaning || ch.japaneseInEnglishOrder);
+                kv(d, "かかる先", ch.modifiesText || ch.modifiesId);
+                kv(d, "補足", ch.note);
+                l.append(d);
+              });
+              b.append(l);
+            }),
+          );
+          all.push(
+            block("4　直訳", "literal", (b) => {
+              kv(b, "直訳", s.literalTranslation);
+              let p = document.createElement("p");
+              p.className = "hint";
+              p.textContent = "英文構造との対応を優先した訳です。";
+              b.append(p);
+            }),
+          );
+          all.push(
+            block("5　自然な日本語訳", "natural", (b) => {
+              kv(b, "自然訳", s.naturalTranslation);
+              if (s.alternativeTranslations.length)
+                kv(b, "別訳", s.alternativeTranslations.join("／"));
+              let l = document.createElement("div");
+              l.className = "list";
+              s.translationChanges.forEach((x) => {
+                let d = document.createElement("div");
+                d.className = "item";
+                kv(d, "原文", x.source);
+                kv(d, "直訳", x.literal);
+                kv(d, "自然な訳", x.natural);
+                kv(d, "変えた理由", x.reason);
+                l.append(d);
+              });
+              b.append(l);
+            }),
+          );
+          all.push(
+            block("6　文法事項", "grammar", (b) => {
+              let l = document.createElement("div");
+              l.className = "list";
+              s.grammarPoints.forEach((g) => {
+                let d = document.createElement("div");
+                d.className = "item";
+                let h = document.createElement("h4");
+                h.textContent = g.name || "文法ポイント";
+                d.append(h);
+                kv(d, "該当箇所", g.text);
+                kv(d, "この文での働き", g.function);
+                kv(d, "なぜこの形か", g.reason);
+                kv(d, "読み方", g.readingTip);
+                kv(d, "訳し方", g.translationTip);
+                kv(d, "注意", g.commonMistake);
+                kv(d, "短い例", g.example);
+                l.append(d);
+              });
+              b.append(l);
+            }),
+          );
+          all.push(
+            block("指示語・省略・修飾関係", "refs", (b) => {
+              let l = document.createElement("div");
+              l.className = "list";
+              s.references.forEach((r) => {
+                let d = document.createElement("div");
+                d.className = "item";
+                kv(d, "元の語", r.sourceText);
+                kv(d, "指すもの・かかる先", r.targetText);
+                kv(d, "説明", r.explanation);
+                l.append(d);
+              });
+              s.omissions.forEach((o) => {
+                let d = document.createElement("div");
+                d.className = "item";
+                kv(d, "省略箇所", o.positionText);
+                kv(d, "補うと", o.restoredText);
+                kv(d, "説明", o.explanation);
+                l.append(d);
+              });
+              if (!l.children.length)
+                l.textContent = "特に示す情報はありません。";
+              b.append(l);
+            }),
+          );
+          all.push(
+            block("構文ツリー", "tree", (b) => {
+              let w = document.createElement("div"),
+                u = document.createElement("ul");
+              w.className = "treeWrap";
+              u.className = "tree";
+              tree(s.tree, u);
+              w.append(u);
+              b.append(w);
+            }),
+          );
+          let visible =
+              mode === "simple"
+                ? ["structure", "literal", "natural"]
+                : mode === "standard"
+                  ? [
+                      "structure",
+                      "order",
+                      "chunks",
+                      "literal",
+                      "natural",
+                      "grammar",
+                    ]
+                  : null,
+            h = $("#blocks");
+          h.replaceChildren();
+          all.forEach(
+            (x) => (!visible || visible.includes(x.dataset.key)) && h.append(x),
+          );
+          save(K.l, { id: m.id, index: st.index });
+          cont();
+        }
+        function fileSafe(s) {
+          return (
+            str(s)
+              .replace(/[\\/:*?"<>|]/g, "_")
+              .slice(0, 60) || "english_material"
+          );
+        }
+        function download(d, n) {
+          let b = new Blob([JSON.stringify(d, null, 2)], {
+              type: "application/json",
+            }),
+            a = document.createElement("a");
+          a.href = URL.createObjectURL(b);
+          a.download = n;
+          document.body.append(a);
+          a.click();
+          a.remove();
+          setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+        }
+        function renderLibrary() {
+          let h = $("#library");
+          h.replaceChildren();
+          if (!st.materials.length) {
+            let e = document.createElement("div");
+            e.className = "card empty";
+            e.textContent = "保存した教材はまだありません。";
+            let b = document.createElement("button");
+            b.textContent = "サンプル教材を開く";
+            b.onclick = openSample;
+            e.append(document.createElement("br"), b);
+            h.append(e);
+            return;
+          }
+          st.materials.forEach((m) => {
+            let r = document.createElement("article"),
+              i = document.createElement("div"),
+              t = document.createElement("h3"),
+              meta = document.createElement("div"),
+              a = document.createElement("div");
+            r.className = "libraryItem";
+            t.textContent = m.title;
+            meta.className = "meta";
+            meta.textContent = `${m.data.sentences.length}文・更新 ${new Date(m.updated).toLocaleDateString("ja-JP")}`;
+            i.append(t, meta);
+            a.className = "row";
+            let o = document.createElement("button"),
+              x = document.createElement("button"),
+              del = document.createElement("button");
+            o.className = "primary";
+            o.textContent = "読む";
+            o.onclick = () => {
+              st.id = m.id;
+              st.index =
+                load(K.l, {}).id === m.id ? load(K.l, {}).index || 0 : 0;
+              go("study");
+            };
+            x.className = "small";
+            x.textContent = "書き出す";
+            x.onclick = () => download(m.data, fileSafe(m.title) + ".json");
+            del.className = "small danger";
+            del.textContent = "削除";
+            del.onclick = () => {
+              if (confirm(`「${m.title}」を削除しますか？`)) {
+                st.materials = st.materials.filter((y) => y.id !== m.id);
+                if (st.id === m.id) st.id = null;
+                save(K.m, st.materials);
+                cont();
+                renderLibrary();
+              }
+            };
+            a.append(o, x, del);
+            r.append(i, a);
+            h.append(r);
+          });
+        }
+        function promptForBase(text) {
+          return `あなたは英語統語論・英文法・日英翻訳教育の専門家です。次の英文を日本人学習者向け教材JSONへ変換してください。\n\n【最優先】出力は有効なJSONオブジェクトだけ。Markdownコードフェンス、前置き、後書きは禁止。schemaVersionは"1.0"。元の語順、綴り、句読点、段落を変更せず、全ての文を処理する。sentence.textも原文どおり。startは各sentence.text内の0始まり、endは終了位置（文字を含まない）。ID・text・start・endを併用する。不確実な分析は断定せず、複数解釈はnoteかexplanationに示す。\n\nSVOCは節ごとに判断し、修飾語Mと主要素を区別する。句と節を区別し、関係詞の先行詞、代名詞の指示先、省略、分詞・不定詞の意味上の主語、修飾先、同格、曖昧性を示す。chunksは単語単位でなく意味のまとまりとし、英語の語順どおりの日本語を一対一対応させる。直訳と自然訳を区別し、変更理由と妥当な別訳を示す。文法は一般論でなくこの文での具体的な働きを初心者にも分かる短い日本語で説明する。treeは完全な生成文法より「何が何にかかるか」が分かる教育用とし、Sentence、Main/Subordinate Clause、Subject、Predicate、Verb、Object、Complement、Modifier、Phraseを必要に応じて含め、refIdを付ける。\n\n形：{"schemaVersion":"1.0","title":"教材名","originalText":"全文","sentences":[{"id":"s1","text":"原文の一文","pattern":"SVO","elements":[{"id":"e1","role":"S|V|O|C|M","text":"原文完全一致","start":0,"end":1,"function":"働き","clauseId":"c1"}],"phrases":[{"id":"p1","type":"noun_phrase等","label":"名詞句等","text":"原文完全一致","start":0,"end":1,"parentId":null,"modifiesId":null,"function":"働き"}],"clauses":[{"id":"c1","type":"main_clause等","label":"主節等","text":"原文完全一致","start":0,"end":1,"function":"働き","introducedBy":null,"dependsOn":null,"modifiesId":null,"omittedElement":null}],"chunks":[{"id":"ch1","english":"原文の連続部分","japaneseInEnglishOrder":"語順どおりの意味","meaning":"文脈上の意味","function":"働き","modifiesId":null,"modifiesText":null,"note":""}],"literalTranslation":"直訳","naturalTranslation":"自然訳","alternativeTranslations":[],"translationChanges":[{"source":"原文箇所","literal":"直訳","natural":"自然な表現","reason":"理由"}],"grammarPoints":[{"id":"g1","text":"該当箇所","name":"項目名","function":"働き","reason":"形の理由","readingTip":"読み方","translationTip":"訳し方","commonMistake":"注意","example":"短い例"}],"references":[{"id":"r1","sourceText":"it等","targetText":"指示対象","sourceId":null,"targetId":null,"explanation":"説明"}],"omissions":[{"id":"o1","positionText":"省略箇所","restoredText":"補う表現","explanation":"説明"}],"tree":{"id":"t1","label":"Sentence","text":"文全体","refId":"s1","children":[]}}]}\n\n<<<ORIGINAL_ENGLISH_START>>>\n${text}\n<<<ORIGINAL_ENGLISH_END>>>`;
+        }
+        function promptFor(text) {
+          const quoteRule =
+            '【JSONの引用符】キーと文字列を囲む引用符には、必ず半角の直線ダブルクォート "（U+0022）だけを使ってください。装飾付き引用符 “ ” と全角引用符 ＂ は絶対に使わないでください。';
+          return `${quoteRule}\n\n${promptForBase(text)}`;
+        }
+        function sampleData() {
+          let t =
+              "The plan, which was proposed by the committee, may help us to work more efficiently because it clarifies our priorities.",
+            F = (x) => {
+              let i = t.indexOf(x);
+              return { start: i, end: i + x.length };
+            },
+            E = (id, role, text, fn, clauseId) => ({
+              id,
+              role,
+              text,
+              ...F(text),
+              function: fn,
+              clauseId,
+            }),
+            P = (id, type, label, text, fn) => ({
+              id,
+              type,
+              label,
+              text,
+              ...F(text),
+              function: fn,
+            }),
+            C = (
+              id,
+              type,
+              label,
+              text,
+              fn,
+              introducedBy = null,
+              dependsOn = null,
+            ) => ({
+              id,
+              type,
+              label,
+              text,
+              ...F(text),
+              function: fn,
+              introducedBy,
+              dependsOn,
+            });
+          return {
+            schemaVersion: "1.0",
+            title: "サンプル：計画が仕事を助ける文",
+            originalText: t,
+            sentences: [
+              {
+                id: "s1",
+                text: t,
+                pattern: "SVO + 副詞節",
+                elements: [
+                  E("e1", "S", "The plan", "主節の主語", "c1"),
+                  E(
+                    "e2",
+                    "M",
+                    "which was proposed by the committee",
+                    "The planを説明する関係詞節",
+                    "c2",
+                  ),
+                  E("e3", "V", "may help", "助動詞＋動詞", "c1"),
+                  E("e4", "O", "us", "helpの目的語", "c1"),
+                  E(
+                    "e5",
+                    "C",
+                    "to work more efficiently",
+                    "usが行う内容",
+                    "c1",
+                  ),
+                  E(
+                    "e6",
+                    "M",
+                    "because it clarifies our priorities",
+                    "理由の副詞節",
+                    "c3",
+                  ),
+                ],
+                phrases: [
+                  P("p1", "noun_phrase", "名詞句", "The plan", "主語"),
+                  P(
+                    "p2",
+                    "verb_phrase",
+                    "受動態の動詞句",
+                    "was proposed",
+                    "関係詞節の述語",
+                  ),
+                  P(
+                    "p3",
+                    "prepositional_phrase",
+                    "前置詞句",
+                    "by the committee",
+                    "proposedを修飾",
+                  ),
+                  P(
+                    "p4",
+                    "infinitive_phrase",
+                    "不定詞句",
+                    "to work more efficiently",
+                    "usがする内容",
+                  ),
+                  P(
+                    "p5",
+                    "noun_phrase",
+                    "名詞句",
+                    "our priorities",
+                    "clarifiesの目的語",
+                  ),
+                ],
+                clauses: [
+                  C("c1", "main_clause", "主節", t, "文の中心"),
+                  C(
+                    "c2",
+                    "relative_clause",
+                    "関係詞節",
+                    "which was proposed by the committee",
+                    "The planを後ろから説明",
+                    "which",
+                    "c1",
+                  ),
+                  C(
+                    "c3",
+                    "adverb_clause",
+                    "理由の副詞節",
+                    "because it clarifies our priorities",
+                    "理由を示す",
+                    "because",
+                    "c1",
+                  ),
+                ],
+                chunks: [
+                  {
+                    id: "ch1",
+                    english: "The plan",
+                    japaneseInEnglishOrder: "その計画は",
+                    meaning: "その計画",
+                    function: "主語",
+                  },
+                  {
+                    id: "ch2",
+                    english: "which was proposed by the committee",
+                    japaneseInEnglishOrder: "委員会によって提案されたのだが",
+                    meaning: "委員会が提案した",
+                    function: "関係詞節",
+                    modifiesText: "The plan",
+                  },
+                  {
+                    id: "ch3",
+                    english: "may help us",
+                    japaneseInEnglishOrder: "私たちの助けになるかもしれない",
+                    meaning: "私たちに役立つ可能性がある",
+                    function: "主節の述語",
+                  },
+                  {
+                    id: "ch4",
+                    english: "to work more efficiently",
+                    japaneseInEnglishOrder: "もっと効率よく働くのに",
+                    meaning: "より効率的に仕事をすること",
+                    function: "usがする内容",
+                  },
+                  {
+                    id: "ch5",
+                    english: "because it clarifies our priorities",
+                    japaneseInEnglishOrder:
+                      "なぜなら、それが優先事項を明確にするから",
+                    meaning: "優先順位がはっきりするため",
+                    function: "理由の副詞節",
+                    note: "itはThe planを指す",
+                  },
+                ],
+                literalTranslation:
+                  "委員会によって提案されたその計画は、それが私たちの優先事項を明確にするので、私たちがより効率的に働くのを助けるかもしれない。",
+                naturalTranslation:
+                  "委員会が提案したその計画によって優先順位が明確になり、私たちはより効率よく働けるかもしれない。",
+                alternativeTranslations: [
+                  "委員会の提案した計画は、優先事項を明確にし、仕事の効率化に役立つ可能性がある。",
+                ],
+                translationChanges: [
+                  {
+                    source: "which was proposed by the committee",
+                    literal: "委員会によって提案された",
+                    natural: "委員会が提案した",
+                    reason: "受動態を能動態にすると自然だから",
+                  },
+                  {
+                    source: "because it clarifies our priorities",
+                    literal: "それが優先事項を明確にするので",
+                    natural: "優先順位が明確になり",
+                    reason: "指示対象と因果関係を自然な日本語にしたから",
+                  },
+                ],
+                grammarPoints: [
+                  {
+                    id: "g1",
+                    text: "which was proposed by the committee",
+                    name: "関係代名詞と受動態",
+                    function:
+                      "whichがThe planを受け、計画を追加説明する。was proposedは受動態。",
+                    reason: "計画は提案される対象だから。",
+                    readingTip: "コンマ内を外すと主節が見える。",
+                    translationTip: "「委員会が提案した」と能動的に訳せる。",
+                    commonMistake: "whichを疑問詞と読まない。",
+                    example:
+                      "The book, which was written in 2020, became popular.",
+                  },
+                  {
+                    id: "g2",
+                    text: "may help us to work",
+                    name: "助動詞mayとhelp + 人 + to不定詞",
+                    function: "mayは可能性。to workはusがする行為。",
+                    reason: "効果を断定せず可能性として述べる。",
+                    readingTip: "usとto workをまとめて捉える。",
+                    translationTip: "「働けるようにする」と言い換えられる。",
+                    commonMistake: "mayを許可だけで読まない。",
+                    example: "This tool may help you to learn.",
+                  },
+                ],
+                references: [
+                  {
+                    id: "r1",
+                    sourceText: "which",
+                    targetText: "The plan",
+                    explanation: "whichの先行詞はThe plan。",
+                  },
+                  {
+                    id: "r2",
+                    sourceText: "it",
+                    targetText: "The plan",
+                    explanation: "itはThe planを指す。",
+                  },
+                ],
+                omissions: [],
+                tree: {
+                  id: "t1",
+                  label: "Sentence",
+                  text: t,
+                  children: [
+                    {
+                      label: "Main Clause",
+                      text: "The plan may help us to work more efficiently",
+                      refId: "c1",
+                      children: [
+                        {
+                          label: "Subject",
+                          text: "The plan",
+                          refId: "e1",
+                          children: [
+                            {
+                              label: "Subordinate Clause (relative)",
+                              text: "which was proposed by the committee",
+                              refId: "c2",
+                            },
+                          ],
+                        },
+                        {
+                          label: "Predicate",
+                          text: "may help us to work more efficiently",
+                          children: [
+                            { label: "Verb", text: "may help", refId: "e3" },
+                            { label: "Object", text: "us", refId: "e4" },
+                            {
+                              label: "Phrase (infinitive)",
+                              text: "to work more efficiently",
+                              refId: "e5",
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                    {
+                      label: "Subordinate Clause (reason)",
+                      text: "because it clarifies our priorities",
+                      refId: "c3",
+                      children: [
+                        { label: "Subject", text: "it" },
+                        { label: "Verb", text: "clarifies" },
+                        { label: "Object", text: "our priorities" },
+                      ],
+                    },
+                  ],
+                },
+              },
+            ],
+          };
+        }
+        function openSample() {
+          let d = sampleData();
+          put(d, d.title);
+          go("study");
+        }
+        $$("[data-go]").forEach((b) => (b.onclick = () => go(b.dataset.go)));
+        $("#continue").onclick = () => go("study");
+        $("#sample").onclick = openSample;
+        $("#source").oninput = (e) => {
+          if (e.target.value.length > 250000)
+            e.target.value = e.target.value.slice(0, 250000);
+          $("#count").textContent =
+            `${e.target.value.length.toLocaleString()}文字・${e.target.value.trim() ? (e.target.value.match(/[.!?](?:[”’"']|\s|$)/g) || [1]).length : 0}文の目安`;
+          save(K.d, e.target.value);
+        };
+        $("#clear").onclick = () => {
+          if (confirm("入力した英文を消しますか？")) {
+            $("#source").value = "";
+            $("#source").dispatchEvent(new Event("input"));
+          }
+        };
+        $("#copy").onclick = async () => {
+          let t = $("#source").value.trim();
+          if (!t) return msg("先に英文を入れてください");
+          let p = promptFor(t),
+            ok = false;
+          try {
+            await navigator.clipboard.writeText(p);
+            ok = true;
+          } catch {
+            let a = document.createElement("textarea");
+            a.value = p;
+            a.style.position = "fixed";
+            a.style.opacity = 0;
+            document.body.append(a);
+            a.select();
+            ok =
+              typeof document.execCommand === "function" &&
+              document.execCommand("copy");
+            a.remove();
+          }
+          if (ok) {
+            msg("コピーしました。ChatGPTへ貼り付けてください");
+            go("import");
+          } else
+            msg("自動コピーできません。入力欄の内容を手動でコピーしてください");
+        };
+        $("#paste").onclick = async () => {
+          try {
+            $("#result").value = await navigator.clipboard.readText();
+            msg("貼り付けました");
+          } catch {
+            msg("入力欄を長押しして「ペースト」を選んでください");
+          }
+        };
+        $("#check").onclick = () => {
+          let n = $("#importNotice");
+          n.hidden = false;
+          n.className = "notice";
+          try {
+            let d = extract($("#result").value),
+              v = validate(d, $("#source").value);
+            if (!v.ok) {
+              n.classList.add("error");
+              n.textContent = "読み込めません。" + v.errors.join(" ");
+              return;
+            }
+            if (
+              v.warnings.length &&
+              !confirm(v.warnings.join("\n") + "\n\nこのまま学習しますか？")
+            )
+              return;
+            if (put(d, $("#title").value.trim() || d.title)) {
+              n.textContent = "内容を確認できました。学習を始めます。";
+              setTimeout(() => go("study"), 300);
+            }
+          } catch (e) {
+            n.classList.add("error");
+            n.textContent = e.message;
+          }
+        };
+        $("#prev").onclick = () => {
+          if (st.index) {
+            st.index--;
+            renderStudy();
+            scrollTo({ top: 0 });
+          }
+        };
+        $("#next").onclick = () => {
+          if (st.index < current().data.sentences.length - 1) {
+            st.index++;
+            renderStudy();
+            scrollTo({ top: 0 });
+          }
+        };
+        $$("[data-layer]").forEach(
+          (b) =>
+            (b.onclick = () => {
+              st.layer = b.dataset.layer;
+              layer(current().data.sentences[st.index]);
+            }),
+        );
+        $("#settings").onclick = () => {
+          $("#modal").hidden = false;
+          $("#mode").focus();
+        };
+        $("#close").onclick = () => ($("#modal").hidden = true);
+        $("#modal").onclick = (e) => {
+          if (e.target === $("#modal")) $("#close").click();
+        };
+        $("#mode").onchange = (e) => {
+          st.prefs.mode = e.target.value;
+          save(K.p, st.prefs);
+          renderStudy();
+        };
+        $("#font").oninput = (e) => {
+          st.prefs.font = +e.target.value;
+          save(K.p, st.prefs);
+          prefs();
+        };
+        $("#line").oninput = (e) => {
+          st.prefs.line = +e.target.value;
+          save(K.p, st.prefs);
+          prefs();
+        };
+        $("#theme").onchange = (e) => {
+          st.prefs.theme = e.target.value;
+          save(K.p, st.prefs);
+          prefs();
+        };
+        $("#exportAll").onclick = () =>
+          st.materials.length
+            ? download(
+                {
+                  schemaVersion: "1.0",
+                  exportType: "collection",
+                  materials: st.materials.map((x) => x.data),
+                },
+                "english_structure_lab_backup.json",
+              )
+            : msg("教材がありません");
+        $("#file").onchange = async (e) => {
+          let f = e.target.files?.[0];
+          if (!f) return;
+          try {
+            let o = JSON.parse(await f.text()),
+              list = o.exportType === "collection" ? o.materials : [o],
+              c = 0;
+            for (let d of list.slice(0, 80)) {
+              if (validate(d).ok && put(d, d.title)) c++;
+            }
+            msg(`${c}件を読み込みました`);
+            renderLibrary();
+          } catch {
+            msg("このファイルは読み取れませんでした");
+          }
+          e.target.value = "";
+        };
+        $("#deleteAll").onclick = () => {
+          if (
+            st.materials.length &&
+            confirm("保存教材をすべて削除しますか？") &&
+            prompt("確認のため「すべて削除」と入力してください。") ===
+              "すべて削除"
+          ) {
+            st.materials = [];
+            st.id = null;
+            save(K.m, []);
+            localStorage.removeItem(K.l);
+            cont();
+            renderLibrary();
+            msg("すべて削除しました");
+          }
+        };
+        addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && !$("#modal").hidden) $("#close").click();
+        });
+        st.materials = load(K.m, []).filter((x) => x?.data?.sentences);
+        st.prefs = { ...st.prefs, ...load(K.p, {}) };
+        let last = load(K.l, {});
+        if (st.materials.some((x) => x.id === last.id)) {
+          st.id = last.id;
+          st.index = +last.index || 0;
+        }
+        prefs();
+        cont();
+        let draft = load(K.d, "");
+        if (typeof draft === "string") {
+          $("#source").value = draft;
+          $("#source").dispatchEvent(new Event("input"));
+        }
+        go("home");
+      })();
+    </script>
+    <script>
+      (() => {
+        "use strict";
+        const installModal = document.getElementById("installModal");
+        const showInstall = document.getElementById("showInstall");
+        const closeInstall = document.getElementById("closeInstall");
+        const installCard = document.getElementById("installCard");
+        showInstall.addEventListener("click", () => {
+          installModal.hidden = false;
+          closeInstall.focus();
+        });
+        closeInstall.addEventListener("click", () => {
+          installModal.hidden = true;
+          showInstall.focus();
+        });
+        installModal.addEventListener("click", (e) => {
+          if (e.target === installModal) closeInstall.click();
+        });
+        addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && !installModal.hidden) closeInstall.click();
+        });
+        const standalone =
+          navigator.standalone === true ||
+          matchMedia("(display-mode: standalone)").matches;
+        if (standalone) {
+          installCard.hidden = true;
+          document.documentElement.classList.add("standalone");
+        }
+        if (
+          "serviceWorker" in navigator &&
+          location.protocol.startsWith("http")
+        )
+          navigator.serviceWorker
+            .register("./service-worker.js")
+            .catch(() => {});
+      })();
+    </script>
+  </body>
+</html>
