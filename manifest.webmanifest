@@ -3,7 +3,7 @@
   "short_name": "英文構造ラボ",
   "description": "英文の構造、語順、訳し方、文法を一文ずつ学ぶアプリ",
   "lang": "ja",
-  "start_url": "./index.html",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
