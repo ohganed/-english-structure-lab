@@ -1095,6 +1095,28 @@
           }
           return result;
         }
+        function jsonCandidates(text) {
+          const candidates = [text];
+          // ChatGPTの返答がスマート引用符だけで囲まれている場合は、まず
+          // すべてをJSON標準の半角引用符へ戻す。引用符の左右が途中で
+          // 入れ替わっていても、この経路なら読み取れる。
+          const normalized = text
+            .replace(/^\uFEFF/, "")
+            .replace(/[“”„‟＂]/g, '"')
+            .replace(/\u00a0/g, " ");
+          if (normalized !== text) candidates.push(normalized);
+          const repaired = repairJsonQuotes(text);
+          if (!candidates.includes(repaired)) candidates.push(repaired);
+          return candidates;
+        }
+        function parseJsonCandidate(text) {
+          for (const candidate of jsonCandidates(text)) {
+            try {
+              return JSON.parse(candidate);
+            } catch {}
+          }
+          return null;
+        }
         function extract(raw) {
           if (raw.length > MAX)
             throw Error("結果が大きすぎます。英文を分けて解析してください。");
@@ -1102,39 +1124,31 @@
             .replace(/^\s*```(?:json)?\s*/i, "")
             .replace(/\s*```\s*$/, "")
             .trim();
-          try {
-            return JSON.parse(c);
-          } catch {}
-          const repaired = repairJsonQuotes(c);
-          if (repaired !== c) {
-            try {
-              return JSON.parse(repaired);
-            } catch {}
-            c = repaired;
-          }
-          let s = -1,
-            d = 0,
-            q = false,
-            e = false;
-          for (let i = 0; i < c.length; i++) {
-            let x = c[i];
-            if (q) {
-              if (e) e = false;
-              else if (x === "\\") e = true;
-              else if (x === '"') q = false;
-              continue;
-            }
-            if (x === '"') {
-              q = true;
-              continue;
-            }
-            if (x === "{") {
-              if (!d) s = i;
-              d++;
-            } else if (x === "}" && d && !--d) {
-              try {
-                return JSON.parse(c.slice(s, i + 1));
-              } catch {
+          const direct = parseJsonCandidate(c);
+          if (direct) return direct;
+          for (const candidate of jsonCandidates(c)) {
+            let s = -1,
+              d = 0,
+              q = false,
+              e = false;
+            for (let i = 0; i < candidate.length; i++) {
+              let x = candidate[i];
+              if (q) {
+                if (e) e = false;
+                else if (x === "\\") e = true;
+                else if (x === '"') q = false;
+                continue;
+              }
+              if (x === '"') {
+                q = true;
+                continue;
+              }
+              if (x === "{") {
+                if (!d) s = i;
+                d++;
+              } else if (x === "}" && d && !--d) {
+                const parsed = parseJsonCandidate(candidate.slice(s, i + 1));
+                if (parsed) return parsed;
                 s = -1;
               }
             }
