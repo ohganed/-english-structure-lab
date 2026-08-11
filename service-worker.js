@@ -1,9 +1,10 @@
-const CACHE = "english-structure-lab-v2";
+const CACHE = "english-structure-lab-v3";
 const ASSETS = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
   "./deployment.config.json",
+  "./storage-layer.js",
   "./app-icon-180.png",
   "./app-icon-192.svg",
   "./app-icon-512.png",
