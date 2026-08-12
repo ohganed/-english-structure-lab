@@ -152,6 +152,11 @@
         font-size: 0.72rem;
         color: var(--muted);
       }
+      .appVersion {
+        font-size: 0.68rem;
+        color: var(--muted);
+        white-space: nowrap;
+      }
       .shell {
         width: min(1180px, 100%);
         margin: auto;
@@ -669,7 +674,10 @@
         <strong>English Structure Lab</strong
         ><span>英文を、前から構造で読む</span>
       </div>
-      <button class="ghost small" data-go="help">使い方</button>
+      <div class="row">
+        <span class="appVersion" aria-label="アプリの版">v1.0.7</span>
+        <button class="ghost small" data-go="help">使い方</button>
+      </div>
     </header>
     <main class="shell" id="main">
       <section class="view" id="view-home">
@@ -1061,7 +1069,7 @@
             escaped = false;
           for (let i = 0; i < text.length; i++) {
             const char = text[i];
-            if (!inString && /[“”＂]/.test(char)) {
+            if (!inString && /[“”„‟＂]/.test(char)) {
               result += '"';
               inString = true;
               continue;
@@ -1082,7 +1090,7 @@
                 inString = false;
                 continue;
               }
-              if (/[”＂]/.test(char)) {
+              if (/[“”„‟＂]/.test(char)) {
                 const next = text.slice(i + 1).match(/\S/)?.[0];
                 if (!next || /[:,}\]]/.test(next)) {
                   result += '"';
@@ -1097,6 +1105,8 @@
         }
         function jsonCandidates(text) {
           const candidates = [text];
+          const repaired = repairJsonQuotes(text);
+          if (!candidates.includes(repaired)) candidates.push(repaired);
           // ChatGPTの返答がスマート引用符だけで囲まれている場合は、まず
           // すべてをJSON標準の半角引用符へ戻す。引用符の左右が途中で
           // 入れ替わっていても、この経路なら読み取れる。
@@ -1105,9 +1115,17 @@
             .replace(/[“”„‟＂]/g, '"')
             .replace(/\u00a0/g, " ");
           if (normalized !== text) candidates.push(normalized);
-          const repaired = repairJsonQuotes(text);
-          if (!candidates.includes(repaired)) candidates.push(repaired);
-          return candidates;
+          const expanded = [];
+          for (const candidate of candidates) {
+            expanded.push(candidate);
+            const withoutTrailingCommas = candidate.replace(
+              /,\s*([}\]])/g,
+              "$1",
+            );
+            if (!expanded.includes(withoutTrailingCommas))
+              expanded.push(withoutTrailingCommas);
+          }
+          return expanded;
         }
         function parseJsonCandidate(text) {
           for (const candidate of jsonCandidates(text)) {
@@ -1153,8 +1171,18 @@
               }
             }
           }
+          const open = (c.match(/{/g) || []).length,
+            close = (c.match(/}/g) || []).length;
+          if (!c.trim().startsWith("{"))
+            throw Error(
+              "返答の先頭に教材データが見つかりません。ChatGPTの返答内の「{」から貼り付けてください。",
+            );
+          if (open > close)
+            throw Error(
+              `返答の末尾が途中で切れています（閉じ記号が${open - close}個不足）。ChatGPTの返答末尾までコピーしてください。`,
+            );
           throw Error(
-            "解析結果の形を読み取れません。返答が途中で切れていないか確認してください。",
+            "内容の一部に読み取れない記号があります。画面に v1.0.7 と表示されていることを確認してください。",
           );
         }
         function wordSet(v) {
@@ -2376,7 +2404,7 @@
           location.protocol.startsWith("http")
         )
           navigator.serviceWorker
-            .register("./service-worker.js?v=6")
+            .register("./service-worker.js?v=7", { updateViaCache: "none" })
             .catch(() => {});
       })();
     </script>
