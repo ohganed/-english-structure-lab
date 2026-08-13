@@ -675,7 +675,7 @@
         ><span>英文を、前から構造で読む</span>
       </div>
       <div class="row">
-        <span class="appVersion" aria-label="アプリの版">v1.0.7</span>
+        <span class="appVersion" aria-label="アプリの版">v1.0.8</span>
         <button class="ghost small" data-go="help">使い方</button>
       </div>
     </header>
@@ -768,6 +768,7 @@
               id="result"
               placeholder="ここへ貼り付けてください。前後の説明や ``` があっても探します。"
             ></textarea>
+            <div class="meta" id="resultCount">まだ貼り付けられていません</div>
           </div>
           <div class="notice" id="importNotice" hidden role="status"></div>
           <div class="row">
@@ -1182,7 +1183,7 @@
               `返答の末尾が途中で切れています（閉じ記号が${open - close}個不足）。ChatGPTの返答末尾までコピーしてください。`,
             );
           throw Error(
-            "内容の一部に読み取れない記号があります。画面に v1.0.7 と表示されていることを確認してください。",
+            "内容の一部に読み取れない記号があります。画面に v1.0.8 と表示されていることを確認してください。",
           );
         }
         function wordSet(v) {
@@ -1833,7 +1834,9 @@
         function promptFor(text) {
           const quoteRule =
             '【JSONの引用符】キーと文字列を囲む引用符には、必ず半角の直線ダブルクォート "（U+0022）だけを使ってください。装飾付き引用符 “ ” と全角引用符 ＂ は絶対に使わないでください。';
-          return `${quoteRule}\n\n${promptForBase(text)}`;
+          const copyRule =
+            "【最終出力形式・最優先】有効なJSONオブジェクトを1つだけ、必ずjsonコードブロック内に入れて返してください。コードブロックの前後に説明文を書かないでください。これは上記のコードフェンス禁止より優先します。";
+          return `${promptForBase(text)}\n\n${quoteRule}\n\n${copyRule}`;
         }
         function sampleData() {
           let t =
@@ -2190,10 +2193,17 @@
         $("#paste").onclick = async () => {
           try {
             $("#result").value = await navigator.clipboard.readText();
+            $("#result").dispatchEvent(new Event("input"));
             msg("貼り付けました");
           } catch {
             msg("入力欄を長押しして「ペースト」を選んでください");
           }
+        };
+        $("#result").oninput = (e) => {
+          const length = e.target.value.length;
+          $("#resultCount").textContent = length
+            ? `貼り付け済み：${length.toLocaleString()}文字`
+            : "まだ貼り付けられていません";
         };
         $("#check").onclick = () => {
           let n = $("#importNotice");
@@ -2404,7 +2414,7 @@
           location.protocol.startsWith("http")
         )
           navigator.serviceWorker
-            .register("./service-worker.js?v=7", { updateViaCache: "none" })
+            .register("./service-worker.js?v=8", { updateViaCache: "none" })
             .catch(() => {});
       })();
     </script>
