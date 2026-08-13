@@ -675,7 +675,7 @@
         ><span>英文を、前から構造で読む</span>
       </div>
       <div class="row">
-        <span class="appVersion" aria-label="アプリの版">v1.0.8</span>
+        <span class="appVersion" aria-label="アプリの版">v1.0.9</span>
         <button class="ghost small" data-go="help">使い方</button>
       </div>
     </header>
@@ -1183,7 +1183,7 @@
               `返答の末尾が途中で切れています（閉じ記号が${open - close}個不足）。ChatGPTの返答末尾までコピーしてください。`,
             );
           throw Error(
-            "内容の一部に読み取れない記号があります。画面に v1.0.8 と表示されていることを確認してください。",
+            "内容の一部に読み取れない記号があります。画面に v1.0.9 と表示されていることを確認してください。",
           );
         }
         function wordSet(v) {
@@ -2414,7 +2414,7 @@
           location.protocol.startsWith("http")
         )
           navigator.serviceWorker
-            .register("./service-worker.js?v=8", { updateViaCache: "none" })
+            .register("./service-worker.js?v=9", { updateViaCache: "none" })
             .catch(() => {});
       })();
     </script>
