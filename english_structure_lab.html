@@ -369,6 +369,21 @@
         line-height: var(--lh);
         overflow-wrap: anywhere;
       }
+      .speechControls {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        flex-wrap: wrap;
+        margin: 0.8rem 0 0.25rem;
+      }
+      .speechControls select {
+        min-height: 42px;
+        max-width: min(100%, 230px);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: var(--card);
+        padding: 0.45rem;
+      }
       .pattern {
         font-weight: 800;
         color: var(--brand);
@@ -675,7 +690,7 @@
         ><span>英文を、前から構造で読む</span>
       </div>
       <div class="row">
-        <span class="appVersion" aria-label="アプリの版">v1.1.0</span>
+        <span class="appVersion" aria-label="アプリの版">v1.2.0</span>
         <button class="ghost small" data-go="help">使い方</button>
       </div>
     </header>
@@ -826,6 +841,22 @@
               ><button class="small" id="settings">表示設定</button>
             </div>
             <div class="sentence" id="sentence" lang="en"></div>
+            <div class="speechControls" aria-label="英文の読み上げ">
+              <button class="small primary" id="speakSentence">
+                英文を読み上げる
+              </button>
+              <button class="small" id="stopSpeech" hidden>停止</button>
+              <label class="meta" for="speechRate">速さ</label>
+              <select id="speechRate" aria-label="読み上げ速度">
+                <option value="0.82">少しゆっくり</option>
+                <option value="0.94" selected>自然な速さ</option>
+                <option value="1.06">少し速く</option>
+              </select>
+              <select id="speechVoice" aria-label="英語音声">
+                <option value="">自然な英語音声（自動）</option>
+              </select>
+              <span class="meta" id="speechStatus" role="status"></span>
+            </div>
             <div class="layers">
               <button class="small" data-layer="svoc">SVOC</button
               ><button class="small" data-layer="phrases">語句</button
@@ -987,7 +1018,14 @@
           layer: "svoc",
           batch: null,
           importMode: "batch",
-          prefs: { mode: "standard", font: 24, line: 1.85, theme: "auto" },
+          prefs: {
+            mode: "standard",
+            font: 24,
+            line: 1.85,
+            theme: "auto",
+            speechRate: 0.94,
+            speechVoice: "",
+          },
         };
         const str = (v) => (v == null ? "" : String(v)),
           norm = (v) => str(v).normalize("NFKC").replace(/\s+/g, " ").trim(),
@@ -1022,6 +1060,7 @@
           return st.materials.find((x) => x.id === st.id);
         }
         function go(n) {
+          if (n !== "study") stopSpeaking();
           if (n === "study" && !current()) {
             msg("先に教材を選んでください");
             n = "library";
@@ -1047,6 +1086,7 @@
           $("#font").value = st.prefs.font;
           $("#line").value = st.prefs.line;
           $("#theme").value = st.prefs.theme;
+          $("#speechRate").value = str(st.prefs.speechRate || 0.94);
         }
         function cont() {
           let m = current();
@@ -1406,6 +1446,7 @@
           p.append(li);
         }
         function renderStudy() {
+          stopSpeaking();
           let m = current(),
             ss = m?.data.sentences;
           if (!ss?.length) return;
@@ -1589,6 +1630,84 @@
           );
           save(K.l, { id: m.id, index: st.index });
           cont();
+        }
+        function englishVoices() {
+          if (!("speechSynthesis" in window)) return [];
+          return speechSynthesis
+            .getVoices()
+            .filter((voice) => /^en(?:-|_)/i.test(voice.lang));
+        }
+        function voiceScore(voice) {
+          const name = voice.name.toLowerCase();
+          let score = voice.localService ? 20 : 0;
+          if (/siri|premium|enhanced|natural/.test(name)) score += 100;
+          if (/samantha|ava|allison|serena|daniel|karen|moira/.test(name))
+            score += 45;
+          if (/en-us/i.test(voice.lang)) score += 12;
+          if (/compact|novelty|bells|whisper|organ/.test(name)) score -= 80;
+          return score;
+        }
+        function bestEnglishVoice() {
+          const voices = englishVoices();
+          const chosen = voices.find(
+            (voice) => voice.voiceURI === st.prefs.speechVoice,
+          );
+          return (
+            chosen ||
+            [...voices].sort((a, b) => voiceScore(b) - voiceScore(a))[0] ||
+            null
+          );
+        }
+        function updateVoiceList() {
+          const select = $("#speechVoice"),
+            voices = englishVoices(),
+            previous = st.prefs.speechVoice || "";
+          select.replaceChildren(new Option("自然な英語音声（自動）", ""));
+          voices
+            .sort((a, b) => voiceScore(b) - voiceScore(a))
+            .forEach((voice) =>
+              select.append(
+                new Option(`${voice.name}（${voice.lang.replace("_", "-")}）`, voice.voiceURI),
+              ),
+            );
+          select.value = voices.some((voice) => voice.voiceURI === previous)
+            ? previous
+            : "";
+        }
+        function stopSpeaking() {
+          if ("speechSynthesis" in window) speechSynthesis.cancel();
+          const play = $("#speakSentence"),
+            stop = $("#stopSpeech"),
+            status = $("#speechStatus");
+          if (play) play.textContent = "英文を読み上げる";
+          if (stop) stop.hidden = true;
+          if (status) status.textContent = "";
+        }
+        function speakCurrentSentence() {
+          if (!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)) {
+            msg("このブラウザでは読み上げを利用できません");
+            return;
+          }
+          const material = current(),
+            sentence = material?.data?.sentences?.[st.index];
+          if (!sentence?.text) return;
+          speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(sentence.text),
+            voice = bestEnglishVoice();
+          utterance.lang = voice?.lang || "en-US";
+          if (voice) utterance.voice = voice;
+          utterance.rate = Number(st.prefs.speechRate) || 0.94;
+          utterance.pitch = 1;
+          utterance.volume = 1;
+          utterance.onstart = () => {
+            $("#speakSentence").textContent = "もう一度読む";
+            $("#stopSpeech").hidden = false;
+            $("#speechStatus").textContent = voice
+              ? `${voice.name}で再生中`
+              : "英語音声で再生中";
+          };
+          utterance.onend = utterance.onerror = () => stopSpeaking();
+          speechSynthesis.speak(utterance);
         }
         function fileSafe(s) {
           return (
@@ -2301,6 +2420,20 @@
             scrollTo({ top: 0 });
           }
         };
+        $("#speakSentence").onclick = speakCurrentSentence;
+        $("#stopSpeech").onclick = stopSpeaking;
+        $("#speechRate").onchange = (e) => {
+          st.prefs.speechRate = Number(e.target.value);
+          save(K.p, st.prefs);
+          if ("speechSynthesis" in window && speechSynthesis.speaking)
+            speakCurrentSentence();
+        };
+        $("#speechVoice").onchange = (e) => {
+          st.prefs.speechVoice = e.target.value;
+          save(K.p, st.prefs);
+          if ("speechSynthesis" in window && speechSynthesis.speaking)
+            speakCurrentSentence();
+        };
         $$("[data-layer]").forEach(
           (b) =>
             (b.onclick = () => {
@@ -2396,6 +2529,9 @@
           st.index = +last.index || 0;
         }
         prefs();
+        updateVoiceList();
+        if ("speechSynthesis" in window)
+          speechSynthesis.addEventListener?.("voiceschanged", updateVoiceList);
         cont();
         let draft = load(K.d, "");
         if (typeof draft === "string") {
@@ -2438,7 +2574,7 @@
           location.protocol.startsWith("http")
         )
           navigator.serviceWorker
-            .register("./service-worker.js?v=10", { updateViaCache: "none" })
+            .register("./service-worker.js?v=12", { updateViaCache: "none" })
             .catch(() => {});
       })();
     </script>
