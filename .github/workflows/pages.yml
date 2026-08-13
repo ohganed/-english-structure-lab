@@ -30,7 +30,7 @@ jobs:
       - name: Prepare website
         run: |
           mkdir _site
-          cp index.html manifest.webmanifest service-worker.js app-icon-180.png app-icon-512.png _site/
+          cp index.html english_structure_lab.html manifest.webmanifest service-worker.js app-icon-180.png app-icon-512.png _site/
       - name: Upload website
         uses: actions/upload-pages-artifact@v3
       - name: Publish website
