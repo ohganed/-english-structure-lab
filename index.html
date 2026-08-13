@@ -675,7 +675,7 @@
         ><span>英文を、前から構造で読む</span>
       </div>
       <div class="row">
-        <span class="appVersion" aria-label="アプリの版">v1.0.9</span>
+        <span class="appVersion" aria-label="アプリの版">v1.1.0</span>
         <button class="ghost small" data-go="help">使い方</button>
       </div>
     </header>
@@ -700,6 +700,9 @@
           <button class="homeAction primary" data-go="input">
             <b>新しい英文を解析する</b
             ><span>英文を貼り付け、ChatGPTで教材を作ります</span></button
+          ><button class="homeAction" id="useAnalyzed">
+            <b>解析済みの内容を使う</b
+            ><span>以前作った解析結果を、そのまま教材にします</span></button
           ><button class="homeAction" data-go="library">
             <b>保存した英文を読む</b
             ><span>保存済み教材から選びます</span></button
@@ -983,6 +986,7 @@
           index: 0,
           layer: "svoc",
           batch: null,
+          importMode: "batch",
           prefs: { mode: "standard", font: 24, line: 1.85, theme: "auto" },
         };
         const str = (v) => (v == null ? "" : String(v)),
@@ -1770,6 +1774,13 @@
             button = $("#nextBatchCopy"),
             batch = st.batch,
             unit = currentBatchUnit();
+          if (st.importMode === "existing") {
+            panel.hidden = false;
+            panel.textContent =
+              "以前作った解析結果を、そのまま貼り付けてください。元の英文の再入力や再解析は必要ありません。";
+            button.hidden = true;
+            return;
+          }
           if (!batch?.units?.length) {
             panel.hidden = true;
             button.hidden = true;
@@ -2128,6 +2139,13 @@
         }
         $$("[data-go]").forEach((b) => (b.onclick = () => go(b.dataset.go)));
         $("#continue").onclick = () => go("study");
+        $("#useAnalyzed").onclick = () => {
+          st.importMode = "existing";
+          $("#result").value = "";
+          $("#result").dispatchEvent(new Event("input"));
+          $("#title").value = "";
+          go("import");
+        };
         $("#sample").onclick = openSample;
         $("#source").oninput = (e) => {
           if (e.target.value.length > 250000)
@@ -2153,6 +2171,7 @@
         $("#copy").onclick = async () => {
           let t = $("#source").value.trim();
           if (!t) return msg("先に英文を入れてください");
+          st.importMode = "batch";
           const hasProgress = st.batch?.units?.some(
             (unit) => unit.status === "done",
           );
@@ -2210,9 +2229,13 @@
           n.hidden = false;
           n.className = "notice";
           try {
-            const unit = currentBatchUnit();
+            const existing = st.importMode === "existing",
+              unit = existing ? null : currentBatchUnit();
             let d = extract($("#result").value),
-              v = validate(d, unit?.text || $("#source").value);
+              v = validate(
+                d,
+                existing ? "" : unit?.text || $("#source").value,
+              );
             if (!v.ok) {
               n.classList.add("error");
               n.textContent = "読み込めません。" + v.errors.join(" ");
@@ -2256,6 +2279,7 @@
             }
             if (put(d, $("#title").value.trim() || d.title)) {
               n.textContent = "内容を確認できました。学習を始めます。";
+              st.importMode = "batch";
               setTimeout(() => go("study"), 300);
             }
           } catch (e) {
@@ -2414,7 +2438,7 @@
           location.protocol.startsWith("http")
         )
           navigator.serviceWorker
-            .register("./service-worker.js?v=9", { updateViaCache: "none" })
+            .register("./service-worker.js?v=10", { updateViaCache: "none" })
             .catch(() => {});
       })();
     </script>
