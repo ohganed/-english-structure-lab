@@ -31,6 +31,8 @@ jobs:
         run: |
           mkdir _site
           cp index.html english_structure_lab.html manifest.webmanifest service-worker.js app-icon-180.png app-icon-512.png _site/
+          mkdir -p _site/arabic
+          cp arabic/index.html arabic/manifest.webmanifest arabic/service-worker.js arabic/icon.svg _site/arabic/
       - name: Upload website
         uses: actions/upload-pages-artifact@v3
       - name: Publish website
