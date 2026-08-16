@@ -32,7 +32,7 @@ jobs:
           mkdir _site
           cp index.html english_structure_lab.html manifest.webmanifest service-worker.js app-icon-180.png app-icon-512.png _site/
           mkdir -p _site/arabic
-          cp arabic/index.html arabic/scenes.html arabic/living.html arabic/a1-batch1.js arabic/manifest.webmanifest arabic/service-worker.js arabic/icon.svg _site/arabic/
+          cp arabic/index.html arabic/scenes.html arabic/living.html arabic/a1-batch1.js arabic/a1-batch2.js arabic/a1-batch3.js arabic/manifest.webmanifest arabic/service-worker.js arabic/icon.svg _site/arabic/
       - name: Upload website
         uses: actions/upload-pages-artifact@v3
       - name: Publish website
