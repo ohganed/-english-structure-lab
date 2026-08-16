@@ -1,0 +1,1 @@
+window.ARABIC_A1_BATCH1={"schemaVersion":"2.0","course":"Arabic Structure Lab Living World","level":"A1","batch":"1/3","experienceRange":"1-50","designPrinciple":"Situation → Mental Scene → Feeling/Need → Sound → Script → Use → Analysis","experiences":[]};
