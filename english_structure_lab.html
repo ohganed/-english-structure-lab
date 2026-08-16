@@ -384,6 +384,29 @@
         background: var(--card);
         padding: 0.45rem;
       }
+      .contextPanel {
+        display: grid;
+        gap: 0.55rem;
+        margin-top: 0.75rem;
+        padding: 0.8rem;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--bg);
+        line-height: 1.65;
+      }
+      .contextPanel[hidden] {
+        display: none;
+      }
+      .contextLine {
+        color: var(--muted);
+        font-family: Georgia, "Times New Roman", serif;
+      }
+      .contextLine.current {
+        color: var(--ink);
+        border-left: 4px solid var(--brand);
+        padding-left: 0.65rem;
+        font-weight: 700;
+      }
       .pattern {
         font-weight: 800;
         color: var(--brand);
@@ -690,7 +713,7 @@
         ><span>英文を、前から構造で読む</span>
       </div>
       <div class="row">
-        <span class="appVersion" aria-label="アプリの版">v1.2.0</span>
+        <span class="appVersion" aria-label="アプリの版">v1.2.1</span>
         <button class="ghost small" data-go="help">使い方</button>
       </div>
     </header>
@@ -857,6 +880,15 @@
               </select>
               <span class="meta" id="speechStatus" role="status"></span>
             </div>
+            <button
+              class="small ghost"
+              id="contextToggle"
+              aria-expanded="false"
+              aria-controls="contextPanel"
+            >
+              前後の文脈を見る
+            </button>
+            <div class="contextPanel" id="contextPanel" hidden></div>
             <div class="layers">
               <button class="small" data-layer="svoc">SVOC</button
               ><button class="small" data-layer="phrases">語句</button
@@ -1459,6 +1491,7 @@
             ? `文型 ${s.pattern}`
             : "文の構造";
           $("#sentence").textContent = s.text;
+          renderSentenceContext(m, s);
           $("#prev").disabled = !st.index;
           $("#next").disabled = st.index === ss.length - 1;
           layer(s);
@@ -1630,6 +1663,35 @@
           );
           save(K.l, { id: m.id, index: st.index });
           cont();
+        }
+        function renderSentenceContext(material, sentence) {
+          const panel = $("#contextPanel"),
+            toggle = $("#contextToggle"),
+            sentences = material.data.sentences,
+            before = sentences[st.index - 1],
+            after = sentences[st.index + 1];
+          panel.replaceChildren();
+          [
+            before && { label: "前の文", text: before.text, current: false },
+            { label: "現在の文", text: sentence.text, current: true },
+            after && { label: "次の文", text: after.text, current: false },
+          ]
+            .filter(Boolean)
+            .forEach((item) => {
+              const line = document.createElement("div"),
+                label = document.createElement("small"),
+                text = document.createElement("div");
+              line.className = `contextLine${item.current ? " current" : ""}`;
+              label.textContent = item.label;
+              text.lang = "en";
+              text.textContent = item.text;
+              line.append(label, text);
+              panel.append(line);
+            });
+          panel.hidden = true;
+          toggle.setAttribute("aria-expanded", "false");
+          toggle.textContent = "前後の文脈を見る";
+          toggle.hidden = sentences.length < 2;
         }
         function englishVoices() {
           if (!("speechSynthesis" in window)) return [];
@@ -2422,6 +2484,15 @@
         };
         $("#speakSentence").onclick = speakCurrentSentence;
         $("#stopSpeech").onclick = stopSpeaking;
+        $("#contextToggle").onclick = () => {
+          const panel = $("#contextPanel"),
+            open = panel.hidden;
+          panel.hidden = !open;
+          $("#contextToggle").setAttribute("aria-expanded", str(open));
+          $("#contextToggle").textContent = open
+            ? "前後の文脈を閉じる"
+            : "前後の文脈を見る";
+        };
         $("#speechRate").onchange = (e) => {
           st.prefs.speechRate = Number(e.target.value);
           save(K.p, st.prefs);
@@ -2574,7 +2645,7 @@
           location.protocol.startsWith("http")
         )
           navigator.serviceWorker
-            .register("./service-worker.js?v=12", { updateViaCache: "none" })
+            .register("./service-worker.js?v=13", { updateViaCache: "none" })
             .catch(() => {});
       })();
     </script>
