@@ -32,8 +32,8 @@ jobs:
           mkdir _site
           cp index.html english_structure_lab.html manifest.webmanifest service-worker.js app-icon-180.png app-icon-512.png _site/
           mkdir -p _site/arabic
-          cp arabic/index.html arabic/scenes.html arabic/living.html arabic/a1-batch1.js arabic/a1-batch2.js arabic/a1-batch3.js arabic/a1-analysis.js arabic/a1-grammar.js arabic/grammar-lens.js arabic/a1-dependency.js arabic/dependency-map.js arabic/grammar-depth.js arabic/verb-engine.js arabic/manifest.webmanifest arabic/service-worker.js arabic/icon.svg _site/arabic/
-          sed -i 's#</body>#<script src="./grammar-lens.js"></script><script src="./a1-dependency.js"></script><script src="./dependency-map.js"></script><script src="./grammar-depth.js"></script><script src="./verb-engine.js"></script></body>#' _site/arabic/living.html
+          cp arabic/index.html arabic/scenes.html arabic/living.html arabic/a1-batch1.js arabic/a1-batch2.js arabic/a1-batch3.js arabic/a1-analysis.js arabic/a1-grammar.js arabic/grammar-lens.js arabic/a1-dependency.js arabic/dependency-map.js arabic/grammar-depth.js arabic/verb-engine.js arabic/verb-family-map.js arabic/manifest.webmanifest arabic/service-worker.js arabic/icon.svg _site/arabic/
+          sed -i 's#</body>#<script src="./grammar-lens.js"></script><script src="./a1-dependency.js"></script><script src="./dependency-map.js"></script><script src="./grammar-depth.js"></script><script src="./verb-engine.js"></script><script src="./verb-family-map.js"></script></body>#' _site/arabic/living.html
       - name: Upload website
         uses: actions/upload-pages-artifact@v3
       - name: Publish website
