@@ -18,17 +18,17 @@ function makePage(sentence,docIndex,start,end){
   const words=(sentence.words||[]).filter(w=>Number.isInteger(w.start)&&Number.isInteger(w.end)&&w.start>=left&&w.end<=right).map(shiftWord);
   const chunks=(sentence.chunks||[]).filter(c=>Number.isInteger(c.start)&&Number.isInteger(c.end)&&c.start>=left&&c.end<=right).map(c=>({...c,start:c.start-left,end:c.end-left}));
   const vText=words.length?null:(sentence.vocalized||sentence.ttsText||'');
-  return {...sentence,_docIndex:docIndex,_sliceStart:left,_sliceEnd:right,text,words,chunks,vocalized:vText||text,ttsText:vText||text,overallMeaning: sentence.overallMeaning||{}};
+  return {...sentence,_docIndex:docIndex,_sliceStart:left,_sliceEnd:right,text,words,chunks,vocalized:vText||text,ttsText:vText||text,overallMeaning:sentence.overallMeaning||{}};
 }
 function pages(){
   const arr=[];
   for(let di=0;di<(L?.sentences?.length||0);di++){
-    const x=L.sentences[di], bs=boundaries(x.text||'');
+    const x=L.sentences[di],bs=boundaries(x.text||'');
     bs.forEach(([a,b])=>arr.push(makePage(x,di,a,b)));
   }
   return arr;
 }
-function current(){const p=pages(); if(!p.length)return null; pageIndex=Math.max(0,Math.min(pageIndex,p.length-1)); return p[pageIndex];}
+function current(){const p=pages();if(!p.length)return null;pageIndex=Math.max(0,Math.min(pageIndex,p.length-1));return p[pageIndex];}
 s=function(){return current()};
 render=function(){
   const all=pages(),x=current(),r=$('#reader');
@@ -37,11 +37,11 @@ render=function(){
   let ws=[...(x.words||[])].sort((a,b)=>a.start-b.start),h='',p=0;
   if(ws.length){for(const w of ws){h+=esc(x.text.slice(p,w.start))+`<span class="word" data-w="${esc(w.id)}">${esc(voc?(w.vocalized||w.surface):w.surface)}</span>`;p=w.end}h+=esc(x.text.slice(p));}
   else h=esc(x.text);
-  const scene=x.mentalScene||x.scene?.mentalScene||x.emojiScene||'';
-  r.innerHTML=`<div class="meta"><span>${esc(L.title||'Arabic text')} · ${pageIndex+1}/${all.length}</span><button class="btn" id="speak">▶︎ صوت</button></div>${scene?`<div style="text-align:center;font-size:30px;margin:16px 0">${esc(scene)}</div>`:''}<div class="arabic">${h}</div><div class="tools"><button class="btn" id="vocal">母音記号</button><button class="btn" id="meaning">文の意味</button>${all.length>1?'<button class="btn" id="prev">←</button><button class="btn" id="next">→</button>':''}</div><div id="overall"></div>`;
+  const scene=x.learningScene?.mentalScene||x.mentalScene||x.scene?.mentalScene||x.emojiScene||'';
+  r.innerHTML=`<div class="meta"><span>${esc(L.title||'Arabic text')} · ${pageIndex+1}/${all.length}</span><button class="btn" id="speak">▶︎ صوت</button></div>${scene?`<div data-learning-scene="1" style="text-align:center;font-size:34px;line-height:1.6;margin:16px 0 6px">${esc(scene)}</div>`:''}<div class="arabic">${h}</div><div class="tools"><button class="btn" id="vocal">母音記号</button><button class="btn" id="meaning">文の意味</button>${all.length>1?'<button class="btn" id="prev">←</button><button class="btn" id="next">→</button>':''}</div><div id="overall"></div>`;
   $$('[data-w]').forEach(e=>e.onclick=()=>word(e.dataset.w));
   $('#vocal').onclick=()=>{voc=!voc;render()};
-  $('#meaning').onclick=()=>$('#overall').innerHTML=`<div class="panel">${esc(x.overallMeaning?.en||'')}<div class="muted">${esc(x.overallMeaning?.ja||'')}</div></div>`;
+  $('#meaning').onclick=()=>$('#overall').innerHTML=`<div class="panel"><b>${esc(x.overallMeaning?.en||'')}</b><div class="muted">${esc(x.overallMeaning?.ja||'')}</div></div>`;
   $('#speak').onclick=()=>speak(x.ttsText||x.vocalized||x.text);
   $('#prev')?.addEventListener('click',()=>{pageIndex=Math.max(0,pageIndex-1);render()});
   $('#next')?.addEventListener('click',()=>{pageIndex=Math.min(all.length-1,pageIndex+1);render()});
