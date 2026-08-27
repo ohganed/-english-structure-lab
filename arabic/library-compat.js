@@ -9,8 +9,8 @@ window.lib=function(){
  box.innerHTML=`
  <div class="panel" style="margin-bottom:12px;background:#f7fbf9">
    <div class="label">Built-in Curriculum</div>
-   <b>🌍 A1 · 150 Experiences</b>
-   <div class="muted">最初から入っているArabic Living World教材。ブラウザ保存とは無関係に常に利用できます。</div>
+   <b>🌍 A1 · 750 Experiences</b>
+   <div class="muted">最初から入っているArabic Living World教材。既存150教材に600の再遭遇型Experienceを追加しました。ブラウザ保存とは無関係に常に利用できます。</div>
    <div style="margin-top:10px"><a class="btn" href="./living.html" style="display:inline-block;text-decoration:none;color:inherit">Open built-in A1 →</a></div>
  </div>
  <div class="panel" style="margin-bottom:12px">
