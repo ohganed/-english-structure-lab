@@ -5,8 +5,8 @@ const $q=s=>document.querySelector(s);
 const esc2=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function loadScript(src){return new Promise((ok,bad)=>{if(document.querySelector(`script[data-course-src="${src}"]`))return ok();const s=document.createElement('script');s.src=src;s.dataset.courseSrc=src;s.onload=ok;s.onerror=bad;document.head.appendChild(s)})}
 async function ensureData(){
-  for(const f of ['./a1-batch1.js','./a1-batch2.js','./a1-batch3.js']){try{await loadScript(f)}catch(e){}}
-  const batches=[window.ARABIC_A1_BATCH1,window.ARABIC_A1_BATCH2,window.ARABIC_A1_BATCH3].filter(Boolean);
+  for(const f of ['./a1-batch1.js','./a1-batch2.js','./a1-batch3.js','./a1-expansion.js']){try{await loadScript(f)}catch(e){}}
+  const batches=[window.ARABIC_A1_BATCH1,window.ARABIC_A1_BATCH2,window.ARABIC_A1_BATCH3,window.ARABIC_A1_EXPANSION].filter(Boolean);
   items=batches.flatMap(b=>b.experiences||[]).map((r,i)=>({id:r[0],scene:r[1],emotion:r[2],intent:r[3],ar:r[4],en:r[5],ja:r[6],index:i}));
   ci=Math.min(ci,Math.max(0,items.length-1));
 }
