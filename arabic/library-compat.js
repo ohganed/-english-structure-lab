@@ -9,24 +9,17 @@ window.lib=function(){
  box.innerHTML=`
  <div class="panel" style="margin-bottom:12px;background:#f7fbf9">
    <div class="label">Built-in Curriculum</div>
-   <b>🌍 A1 · 750 Experiences</b>
-   <div class="muted">最初から入っているArabic Living World教材。既存150教材に600の再遭遇型Experienceを追加しました。ブラウザ保存とは無関係に常に利用できます。</div>
-   <div style="margin-top:10px"><a class="btn" href="./living.html" style="display:inline-block;text-decoration:none;color:inherit">Open built-in A1 →</a></div>
+   <b>🌍 A1 → C2 · 4,500 Experiences</b>
+   <div class="muted">A1 / A2 / B1 / B2 / C1 / C2 を各750 Experiences収録。Courseからレベルと章を選んで進めます。</div>
+   <div style="margin-top:10px"><button class="btn" id="openFullCourse">Open A1–C2 Course →</button></div>
+   <div style="margin-top:8px"><a class="btn" href="./living.html" style="display:inline-block;text-decoration:none;color:inherit">Open A1 Living World →</a></div>
  </div>
- <div class="panel" style="margin-bottom:12px">
-   <div class="label">Existing Saved Library</div>
-   <b>以前から保存していた教材</b>
-   <div class="muted">このブラウザに保存されている教材。AI Corpusとは別です。</div>
- </div>
+ <div class="panel" style="margin-bottom:12px"><div class="label">Existing Saved Library</div><b>以前から保存していた教材</b><div class="muted">このブラウザに保存されている教材。AI Corpusとは別です。</div></div>
  ${old.length?old.map((x,i)=>row(x,i,'old-lib')).join(''):'<div class="muted" style="padding:14px 4px">このブラウザの保存教材はありません。</div>'}
- <div class="panel" style="margin:18px 0 12px">
-   <div class="label">AI Corpus</div>
-   <b>AIで追加した教材</b>
-   <div class="muted">新規AI解析教材。Built-in Curriculumや従来教材を上書きしません。</div>
- </div>
+ <div class="panel" style="margin:18px 0 12px"><div class="label">AI Corpus</div><b>AIで追加した教材</b><div class="muted">新規AI解析教材。Built-in Curriculumや従来教材を上書きしません。</div></div>
  ${ai.length?ai.map((x,i)=>row(x,i,'ai-lib2')).join(''):'<div class="muted" style="padding:14px 4px">AI Corpusはまだ空です。</div>'}`;
- $$('[data-old-lib]').forEach(b=>b.onclick=()=>openLesson(old[+b.dataset.oldLib]));
- $$('[data-ai-lib2]').forEach(b=>b.onclick=()=>openLesson(ai[+b.dataset.aiLib2]));
+ $('#openFullCourse')?.addEventListener('click',()=>{close('library');document.querySelector('#courseOpen')?.click()});
+ $$('[data-old-lib]').forEach(b=>b.onclick=()=>openLesson(old[+b.dataset.oldLib]));$$('[data-ai-lib2]').forEach(b=>b.onclick=()=>openLesson(ai[+b.dataset.aiLib2]));
 };
 $$('[data-nav="library"]').forEach(b=>{b.onclick=()=>{lib();open('library')}});
 })();
