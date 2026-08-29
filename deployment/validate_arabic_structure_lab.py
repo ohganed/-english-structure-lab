@@ -5,18 +5,14 @@ import re
 import sys
 from pathlib import Path
 
-
 ROOT = Path(sys.argv[1] if len(sys.argv) > 1 else ".").resolve()
-
 
 def fail(message: str) -> None:
     print(f"[FAIL] {message}")
     raise SystemExit(1)
 
-
 def ok(message: str) -> None:
     print(f"[PASS] {message}")
-
 
 def read(path: str) -> str:
     p = ROOT / path
@@ -24,11 +20,11 @@ def read(path: str) -> str:
         fail(f"missing required file: {path}")
     return p.read_text(encoding="utf-8", errors="replace")
 
-
 required_files = [
     "arabic/index.html",
     "arabic/course-mode.js",
     "arabic/custom-corpus.js",
+    "arabic/audio-service.js",
     "arabic/word-audio.js",
     "arabic/sentence-pager.js",
     "arabic/progressive-word.js",
@@ -44,88 +40,79 @@ required_files = [
     "arabic/service-worker.js",
     ".github/workflows/pages.yml",
 ]
-for f in required_files:
-    read(f)
+for f in required_files: read(f)
 ok("critical Arabic runtime files exist")
 
 pages = read(".github/workflows/pages.yml")
-
-# Single source of truth for Deep Analysis: audited engine only.
 if "<script src=\"./deep-analysis-engine.js\"" in pages:
     fail("legacy deep-analysis-engine.js is still injected into production")
 if re.search(r"\barabic/deep-analysis-engine\.js\b", pages):
     fail("legacy deep-analysis-engine.js is still copied into the production artifact")
 ok("legacy Deep Analysis engine is excluded from production")
 
-# Extract only the single sed command that builds the production Arabic index.
-index_lines = [
-    line.strip()
-    for line in pages.splitlines()
-    if "sed -i" in line and "_site/arabic/index.html" in line
+index_lines=[line.strip() for line in pages.splitlines() if "sed -i" in line and "_site/arabic/index.html" in line]
+if len(index_lines)!=1: fail(f"expected exactly one Arabic index injection line, found {len(index_lines)}")
+script_order=re.findall(r'<script src="\./([^"]+)"></script>',index_lines[0])
+if not script_order: fail("could not parse Arabic production script order")
+if len(script_order)!=len(set(script_order)): fail("duplicate production script detected in Arabic index injection")
+required_order=[
+    "custom-corpus.js","audio-service.js","word-audio.js","sentence-pager.js","library-compat.js","progressive-word.js",
+    "deep-analysis-audited.js","deep-audit-pack2.js","deep-audit-fixes.js","deep-audit-nominals.js","deep-audit-nominal-aliases.js",
+    "word-declension.js","verb-conjugation-full.js","course-mode.js","course-word-depth.js","language-mode.js",
 ]
-if len(index_lines) != 1:
-    fail(f"expected exactly one Arabic index injection line, found {len(index_lines)}")
-index_line = index_lines[0]
-script_order = re.findall(r'<script src="\./([^"]+)"></script>', index_line)
-if not script_order:
-    fail("could not parse Arabic production script order")
-if len(script_order) != len(set(script_order)):
-    fail("duplicate production script detected in Arabic index injection")
-
-required_order = [
-    "custom-corpus.js",
-    "word-audio.js",
-    "sentence-pager.js",
-    "library-compat.js",
-    "progressive-word.js",
-    "deep-analysis-audited.js",
-    "deep-audit-pack2.js",
-    "deep-audit-fixes.js",
-    "deep-audit-nominals.js",
-    "deep-audit-nominal-aliases.js",
-    "word-declension.js",
-    "verb-conjugation-full.js",
-    "course-mode.js",
-    "course-word-depth.js",
-    "language-mode.js",
-]
-missing = [s for s in required_order if s not in script_order]
-if missing:
-    fail("missing required production scripts: " + ", ".join(missing))
-positions = [script_order.index(s) for s in required_order]
-if positions != sorted(positions):
-    fail("Arabic production script order violates the audited dependency order")
+missing=[s for s in required_order if s not in script_order]
+if missing: fail("missing required production scripts: "+", ".join(missing))
+positions=[script_order.index(s) for s in required_order]
+if positions!=sorted(positions): fail("Arabic production script order violates the audited dependency order")
 ok("production script order is deterministic and dependency-safe")
 
-# Runtime interaction invariants introduced by the stabilization work.
-word_audio = read("arabic/word-audio.js")
-if "data-speak-ar" not in word_audio or "ARABIC_SPEAK_WORD" not in word_audio:
-    fail("central Arabic word-audio fallback contract is missing")
-ok("central word-audio fallback contract is present")
+audio=read("arabic/audio-service.js")
+for marker in ("ARABIC_AUDIO_SERVICE","SpeechSynthesisUtterance","chooseVoice"):
+    if marker not in audio: fail(f"AudioService contract missing: {marker}")
+ok("AudioService is the centralized browser-TTS boundary")
 
-pager = read("arabic/sentence-pager.js")
+word_audio=read("arabic/word-audio.js")
+if "data-speak-ar" not in word_audio or "ARABIC_AUDIO_SERVICE" not in word_audio:
+    fail("word-audio is not routed through AudioService")
+if "SpeechSynthesisUtterance" in word_audio or "speechSynthesis.speak" in word_audio:
+    fail("word-audio bypasses AudioService")
+ok("word taps use the centralized AudioService")
+
+course=read("arabic/course-mode.js")
+if "ARABIC_AUDIO_SERVICE" not in course: fail("Course audio is not routed through AudioService")
+if "SpeechSynthesisUtterance" in course or "speechSynthesis.speak" in course: fail("Course bypasses AudioService")
+if "querySelectorAll('[data-course-word]').forEach(b=>b.onclick" in course:
+    fail("Course still owns a duplicate per-word audio click handler")
+ok("Course has no duplicate word-audio handler")
+
+progressive=read("arabic/progressive-word.js")
+if "ARABIC_AUDIO_SERVICE" not in progressive: fail("progressive word replay is not routed through AudioService")
+if "SpeechSynthesisUtterance" in progressive or "speechSynthesis.speak" in progressive: fail("progressive word bypasses AudioService")
+ok("progressive word replay uses AudioService")
+
+custom=read("arabic/custom-corpus.js")
+if re.search(r"\brender\s*=\s*function", custom): fail("custom-corpus still overrides global render")
+ok("AI Corpus no longer owns a redundant global render wrapper")
+
+pager=read("arabic/sentence-pager.js")
 if "arabicFallbackHtml" not in pager or "data-speak-ar" not in pager:
     fail("AI Corpus fallback tokenization contract is missing")
 ok("AI Corpus has fallback tokenization for tappable Arabic words")
 
-word_depth = read("arabic/course-word-depth.js")
-for marker in ("3 Forms", "Full Conjugation Table", "Current Form"):
-    if marker not in word_depth:
-        fail(f"course word-depth interaction contract missing marker: {marker}")
+word_depth=read("arabic/course-word-depth.js")
+for marker in ("3 Forms","Full Conjugation Table","Current Form"):
+    if marker not in word_depth: fail(f"course word-depth interaction contract missing marker: {marker}")
 ok("course progressive word-depth contract is present")
 
-verb = read("arabic/verb-conjugation-full.js")
-for pronoun in ("أَنَا", "نَحْنُ", "أَنْتَ", "أَنْتِ", "أَنْتُمَا", "أَنْتُمْ", "أَنْتُنَّ", "هُوَ", "هِيَ", "هُمْ", "هُنَّ"):
-    if pronoun not in verb:
-        fail(f"full conjugation pronoun set missing: {pronoun}")
+verb=read("arabic/verb-conjugation-full.js")
+for pronoun in ("أَنَا","نَحْنُ","أَنْتَ","أَنْتِ","أَنْتُمَا","أَنْتُمْ","أَنْتُنَّ","هُوَ","هِيَ","هُمْ","هُنَّ"):
+    if pronoun not in verb: fail(f"full conjugation pronoun set missing: {pronoun}")
 ok("full verb-conjugation pronoun set is present")
 
-sw = read("arabic/service-worker.js")
-for critical in ("word-audio\\.js", "sentence-pager\\.js", "word-declension\\.js", "verb-conjugation-full\\.js", "course-word-depth\\.js"):
-    if critical not in sw:
-        fail(f"service worker fresh-critical list missing: {critical}")
-if not re.search(r"arabic-structure-lab-v\d+\.\d+\.\d+", sw):
-    fail("service worker cache version is not explicit")
+sw=read("arabic/service-worker.js")
+for critical in ("audio-service\\.js","word-audio\\.js","sentence-pager\\.js","word-declension\\.js","verb-conjugation-full\\.js","course-word-depth\\.js"):
+    if critical not in sw: fail(f"service worker fresh-critical list missing: {critical}")
+if not re.search(r"arabic-structure-lab-v\d+\.\d+\.\d+",sw): fail("service worker cache version is not explicit")
 ok("service worker protects critical Arabic runtime scripts from stale-cache regressions")
 
 print("RESULT: PASS — Arabic Structure Lab stabilization invariants hold")
