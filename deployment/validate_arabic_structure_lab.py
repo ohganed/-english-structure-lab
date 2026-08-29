@@ -51,21 +51,22 @@ ok("critical Arabic runtime files exist")
 pages = read(".github/workflows/pages.yml")
 
 # Single source of truth for Deep Analysis: audited engine only.
-if re.search(r"<script\s+src=\\?\"\./deep-analysis-engine\.js", pages):
+if "<script src=\"./deep-analysis-engine.js\"" in pages:
     fail("legacy deep-analysis-engine.js is still injected into production")
 if re.search(r"\barabic/deep-analysis-engine\.js\b", pages):
     fail("legacy deep-analysis-engine.js is still copied into the production artifact")
 ok("legacy Deep Analysis engine is excluded from production")
 
-# Extract the script order from the production index injection in pages.yml.
-m = re.search(
-    r"sed -i 's#</body>#(?P<body>.*?)</body>#' _site/arabic/index\.html",
-    pages,
-    re.S,
-)
-if not m:
-    fail("could not locate Arabic production script injection in pages.yml")
-script_order = re.findall(r'<script src=\\?"\./([^"\\]+)\\?">', m.group("body"))
+# Extract only the single sed command that builds the production Arabic index.
+index_lines = [
+    line.strip()
+    for line in pages.splitlines()
+    if "sed -i" in line and "_site/arabic/index.html" in line
+]
+if len(index_lines) != 1:
+    fail(f"expected exactly one Arabic index injection line, found {len(index_lines)}")
+index_line = index_lines[0]
+script_order = re.findall(r'<script src="\./([^"]+)"></script>', index_line)
 if not script_order:
     fail("could not parse Arabic production script order")
 if len(script_order) != len(set(script_order)):
