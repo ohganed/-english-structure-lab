@@ -37,32 +37,41 @@ function arabicFallbackHtml(text){
     const m=part.match(/^([^\p{Script=Arabic}]*)([\p{Script=Arabic}\p{M}ـ]+)([^\p{Script=Arabic}]*)$/u);
     if(!m)return esc(part);
     const spoken=m[2];
-    return `${esc(m[1])}<span class="word" data-speak-ar="${esc(spoken)}">${esc(spoken)}</span>${esc(m[3])}`;
+    return `${esc(m[1])}<span class="word aiWordTap" data-speak-ar="${esc(spoken)}">${esc(spoken)}</span>${esc(m[3])}`;
   }).join('');
 }
+function validWord(w,textLen){return w&&Number.isInteger(w.start)&&Number.isInteger(w.end)&&w.start>=0&&w.end>w.start&&w.end<=textLen;}
 render=function(){
   const all=pages(),x=current(),r=$('#reader');
   if(!x){r.innerHTML='<div class="muted" style="text-align:center;padding:90px 10px"><b style="color:var(--i);font-size:18px">アラビア語本文から始めます</b><br><br>「＋ 教材」から文章とJSONを入れてください。</div>';return}
   si=x._docIndex;
-  let ws=[...(x.words||[])].sort((a,b)=>a.start-b.start),h='',p=0;
+  let ws=[...(x.words||[])].filter(w=>validWord(w,x.text.length)).sort((a,b)=>a.start-b.start),h='',p=0;
   if(ws.length){
     for(const w of ws){
-      h+=esc(x.text.slice(p,w.start))+`<span class="word" data-w="${esc(w.id)}" data-speak-ar="${esc(w.ttsText||w.vocalized||w.surface||x.text.slice(w.start,w.end))}">${esc(voc?(w.vocalized||w.surface):w.surface)}</span>`;
+      if(w.start<p)continue;
+      h+=arabicFallbackHtml(x.text.slice(p,w.start));
+      const visible=x.text.slice(w.start,w.end);
+      const shown=voc?(w.vocalized||w.surface||visible):(w.surface||visible);
+      const spoken=w.ttsText||w.vocalized||w.surface||visible;
+      h+=`<span class="word aiWordTap" data-w="${esc(w.id||'')}" data-speak-ar="${esc(spoken)}">${esc(shown)}</span>`;
       p=w.end;
     }
-    h+=esc(x.text.slice(p));
+    h+=arabicFallbackHtml(x.text.slice(p));
   }else{
     h=arabicFallbackHtml(voc?(x.vocalized||x.text):x.text);
   }
   const scene=x.learningScene?.mentalScene||x.mentalScene||x.scene?.mentalScene||x.emojiScene||'';
   r.innerHTML=`<div class="meta"><span>${esc(L.title||'Arabic text')} · ${pageIndex+1}/${all.length}</span><button class="btn" id="speak">▶︎ صوت</button></div>${scene?`<div data-learning-scene="1" style="text-align:center;font-size:34px;line-height:1.6;margin:16px 0 6px">${esc(scene)}</div>`:''}<div class="arabic">${h}</div><div class="tools"><button class="btn" id="vocal">母音記号</button><button class="btn" id="meaning">文の意味</button>${all.length>1?'<button class="btn" id="prev">←</button><button class="btn" id="next">→</button>':''}</div><div id="overall"></div>`;
-  $$('[data-w]').forEach(e=>e.onclick=()=>word(e.dataset.w));
+  $$('[data-w]').forEach(e=>{if(e.dataset.w)e.onclick=()=>word(e.dataset.w)});
   $('#vocal').onclick=()=>{voc=!voc;render()};
   $('#meaning').onclick=()=>$('#overall').innerHTML=`<div class="panel"><b>${esc(x.overallMeaning?.en||'')}</b><div class="muted">${esc(x.overallMeaning?.ja||'')}</div></div>`;
   $('#speak').onclick=()=>speak(x.ttsText||x.vocalized||x.text);
   $('#prev')?.addEventListener('click',()=>{pageIndex=Math.max(0,pageIndex-1);render()});
   $('#next')?.addEventListener('click',()=>{pageIndex=Math.min(all.length-1,pageIndex+1);render()});
 };
+const st=document.createElement('style');
+st.textContent='.aiWordTap{cursor:pointer;border-radius:8px;padding:0 .03em;touch-action:manipulation}.aiWordTap:active{background:#dcefe9}';
+document.head.appendChild(st);
 const oldLoad=$('#load')?.onclick;
 if($('#load'))$('#load').onclick=(ev)=>{pageIndex=0;oldLoad&&oldLoad.call($('#load'),ev);setTimeout(()=>{pageIndex=0;render()},0)};
 const oldLib=window.lib||lib;
