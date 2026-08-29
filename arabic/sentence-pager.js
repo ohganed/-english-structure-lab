@@ -30,13 +30,30 @@ function pages(){
 }
 function current(){const p=pages();if(!p.length)return null;pageIndex=Math.max(0,Math.min(pageIndex,p.length-1));return p[pageIndex];}
 s=function(){return current()};
+function arabicFallbackHtml(text){
+  const parts=String(text||'').split(/(\s+)/);
+  return parts.map(part=>{
+    if(/^\s+$/.test(part))return esc(part);
+    const m=part.match(/^([^\p{Script=Arabic}]*)([\p{Script=Arabic}\p{M}ـ]+)([^\p{Script=Arabic}]*)$/u);
+    if(!m)return esc(part);
+    const spoken=m[2];
+    return `${esc(m[1])}<span class="word" data-speak-ar="${esc(spoken)}">${esc(spoken)}</span>${esc(m[3])}`;
+  }).join('');
+}
 render=function(){
   const all=pages(),x=current(),r=$('#reader');
   if(!x){r.innerHTML='<div class="muted" style="text-align:center;padding:90px 10px"><b style="color:var(--i);font-size:18px">アラビア語本文から始めます</b><br><br>「＋ 教材」から文章とJSONを入れてください。</div>';return}
   si=x._docIndex;
   let ws=[...(x.words||[])].sort((a,b)=>a.start-b.start),h='',p=0;
-  if(ws.length){for(const w of ws){h+=esc(x.text.slice(p,w.start))+`<span class="word" data-w="${esc(w.id)}">${esc(voc?(w.vocalized||w.surface):w.surface)}</span>`;p=w.end}h+=esc(x.text.slice(p));}
-  else h=esc(x.text);
+  if(ws.length){
+    for(const w of ws){
+      h+=esc(x.text.slice(p,w.start))+`<span class="word" data-w="${esc(w.id)}" data-speak-ar="${esc(w.ttsText||w.vocalized||w.surface||x.text.slice(w.start,w.end))}">${esc(voc?(w.vocalized||w.surface):w.surface)}</span>`;
+      p=w.end;
+    }
+    h+=esc(x.text.slice(p));
+  }else{
+    h=arabicFallbackHtml(voc?(x.vocalized||x.text):x.text);
+  }
   const scene=x.learningScene?.mentalScene||x.mentalScene||x.scene?.mentalScene||x.emojiScene||'';
   r.innerHTML=`<div class="meta"><span>${esc(L.title||'Arabic text')} · ${pageIndex+1}/${all.length}</span><button class="btn" id="speak">▶︎ صوت</button></div>${scene?`<div data-learning-scene="1" style="text-align:center;font-size:34px;line-height:1.6;margin:16px 0 6px">${esc(scene)}</div>`:''}<div class="arabic">${h}</div><div class="tools"><button class="btn" id="vocal">母音記号</button><button class="btn" id="meaning">文の意味</button>${all.length>1?'<button class="btn" id="prev">←</button><button class="btn" id="next">→</button>':''}</div><div id="overall"></div>`;
   $$('[data-w]').forEach(e=>e.onclick=()=>word(e.dataset.w));
