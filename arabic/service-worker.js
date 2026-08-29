@@ -1,4 +1,4 @@
-const CACHE='arabic-structure-lab-v0.4.7';
+const CACHE='arabic-structure-lab-v0.4.8';
 const CORE=['./','./index.html','./manifest.webmanifest','./icon.svg'];
 
 self.addEventListener('install',event=>{
@@ -22,7 +22,7 @@ self.addEventListener('fetch',event=>{
 
   const isFreshCritical=
     req.mode==='navigate' ||
-    /\/arabic\/(?:index\.html|course-mode\.js|word-audio\.js|sentence-pager\.js|custom-corpus\.js|language-mode\.js|cefr-curriculum\.js|deep-analysis[^/]*\.js|deep-audit[^/]*\.js|nominal[^/]*\.js|word-declension\.js|verb-conjugation-full\.js|course-word-depth\.js|a1-[^/]*\.js)(?:\?.*)?$/.test(url.pathname+url.search);
+    /\/arabic\/(?:index\.html|course-mode\.js|audio-service\.js|word-audio\.js|sentence-pager\.js|custom-corpus\.js|language-mode\.js|cefr-curriculum\.js|deep-analysis[^/]*\.js|deep-audit[^/]*\.js|nominal[^/]*\.js|word-declension\.js|verb-conjugation-full\.js|course-word-depth\.js|a1-[^/]*\.js)(?:\?.*)?$/.test(url.pathname+url.search);
 
   if(isFreshCritical){
     event.respondWith((async()=>{
