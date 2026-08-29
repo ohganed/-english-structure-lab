@@ -16,3 +16,24 @@ jobs:
           python-version: "3.x"
       - name: Validate PWA deployment
         run: python deployment/validate_deployment.py .
+      - name: Validate Arabic Structure Lab
+        run: |
+          python deployment/validate_arabic_structure_lab.py .
+          for f in \
+            arabic/custom-corpus.js \
+            arabic/word-audio.js \
+            arabic/sentence-pager.js \
+            arabic/library-compat.js \
+            arabic/progressive-word.js \
+            arabic/deep-analysis-audited.js \
+            arabic/deep-audit-pack2.js \
+            arabic/deep-audit-fixes.js \
+            arabic/deep-audit-nominals.js \
+            arabic/deep-audit-nominal-aliases.js \
+            arabic/word-declension.js \
+            arabic/verb-conjugation-full.js \
+            arabic/course-mode.js \
+            arabic/course-word-depth.js \
+            arabic/language-mode.js; do
+            node --check "$f"
+          done
