@@ -21,33 +21,18 @@ def read(path: str) -> str:
     return p.read_text(encoding="utf-8", errors="replace")
 
 required_files = [
-    "arabic/index.html",
-    "arabic/course-mode.js",
-    "arabic/custom-corpus.js",
-    "arabic/audio-service.js",
-    "arabic/word-audio.js",
-    "arabic/sentence-pager.js",
-    "arabic/progressive-word.js",
-    "arabic/deep-analysis-audited.js",
-    "arabic/deep-audit-pack2.js",
-    "arabic/deep-audit-fixes.js",
-    "arabic/deep-audit-nominals.js",
-    "arabic/deep-audit-nominal-aliases.js",
-    "arabic/word-declension.js",
-    "arabic/verb-conjugation-full.js",
-    "arabic/course-word-depth.js",
-    "arabic/language-mode.js",
-    "arabic/service-worker.js",
+    "arabic/index.html","arabic/course-mode.js","arabic/custom-corpus.js","arabic/audio-service.js","arabic/word-audio.js",
+    "arabic/sentence-pager.js","arabic/progressive-word.js","arabic/deep-analysis-audited.js","arabic/deep-audit-pack2.js",
+    "arabic/deep-audit-fixes.js","arabic/deep-audit-nominals.js","arabic/deep-audit-nominal-aliases.js","arabic/word-declension.js",
+    "arabic/verb-conjugation-full.js","arabic/course-word-depth.js","arabic/language-mode.js","arabic/service-worker.js",
     ".github/workflows/pages.yml",
 ]
 for f in required_files: read(f)
 ok("critical Arabic runtime files exist")
 
 pages = read(".github/workflows/pages.yml")
-if "<script src=\"./deep-analysis-engine.js\"" in pages:
-    fail("legacy deep-analysis-engine.js is still injected into production")
-if re.search(r"\barabic/deep-analysis-engine\.js\b", pages):
-    fail("legacy deep-analysis-engine.js is still copied into the production artifact")
+if "<script src=\"./deep-analysis-engine.js\"" in pages: fail("legacy deep-analysis-engine.js is still injected into production")
+if re.search(r"\barabic/deep-analysis-engine\.js\b", pages): fail("legacy deep-analysis-engine.js is still copied into the production artifact")
 ok("legacy Deep Analysis engine is excluded from production")
 
 index_lines=[line.strip() for line in pages.splitlines() if "sed -i" in line and "_site/arabic/index.html" in line]
@@ -55,11 +40,7 @@ if len(index_lines)!=1: fail(f"expected exactly one Arabic index injection line,
 script_order=re.findall(r'<script src="\./([^"]+)"></script>',index_lines[0])
 if not script_order: fail("could not parse Arabic production script order")
 if len(script_order)!=len(set(script_order)): fail("duplicate production script detected in Arabic index injection")
-required_order=[
-    "custom-corpus.js","audio-service.js","word-audio.js","sentence-pager.js","library-compat.js","progressive-word.js",
-    "deep-analysis-audited.js","deep-audit-pack2.js","deep-audit-fixes.js","deep-audit-nominals.js","deep-audit-nominal-aliases.js",
-    "word-declension.js","verb-conjugation-full.js","course-mode.js","course-word-depth.js","language-mode.js",
-]
+required_order=["custom-corpus.js","audio-service.js","word-audio.js","sentence-pager.js","library-compat.js","progressive-word.js","deep-analysis-audited.js","deep-audit-pack2.js","deep-audit-fixes.js","deep-audit-nominals.js","deep-audit-nominal-aliases.js","word-declension.js","verb-conjugation-full.js","course-mode.js","course-word-depth.js","language-mode.js"]
 missing=[s for s in required_order if s not in script_order]
 if missing: fail("missing required production scripts: "+", ".join(missing))
 positions=[script_order.index(s) for s in required_order]
@@ -72,18 +53,17 @@ for marker in ("ARABIC_AUDIO_SERVICE","SpeechSynthesisUtterance","chooseVoice"):
 ok("AudioService is the centralized browser-TTS boundary")
 
 word_audio=read("arabic/word-audio.js")
-if "data-speak-ar" not in word_audio or "ARABIC_AUDIO_SERVICE" not in word_audio:
-    fail("word-audio is not routed through AudioService")
-if "SpeechSynthesisUtterance" in word_audio or "speechSynthesis.speak" in word_audio:
-    fail("word-audio bypasses AudioService")
+if "data-speak-ar" not in word_audio or "ARABIC_AUDIO_SERVICE" not in word_audio: fail("word-audio is not routed through AudioService")
+if "SpeechSynthesisUtterance" in word_audio or "speechSynthesis.speak" in word_audio: fail("word-audio bypasses AudioService")
 ok("word taps use the centralized AudioService")
 
 course=read("arabic/course-mode.js")
+for marker in ("courseSentenceWord","sentenceHtml","data-course-word","Arabic · tap any word"):
+    if marker not in course: fail(f"Course sentence-word interaction missing: {marker}")
 if "ARABIC_AUDIO_SERVICE" not in course: fail("Course audio is not routed through AudioService")
 if "SpeechSynthesisUtterance" in course or "speechSynthesis.speak" in course: fail("Course bypasses AudioService")
-if "querySelectorAll('[data-course-word]').forEach(b=>b.onclick" in course:
-    fail("Course still owns a duplicate per-word audio click handler")
-ok("Course has no duplicate word-audio handler")
+if "querySelectorAll('[data-course-word]').forEach(b=>b.onclick" in course: fail("Course still owns a duplicate per-word audio click handler")
+ok("Course sentence words are directly interactive without duplicate audio handlers")
 
 progressive=read("arabic/progressive-word.js")
 if "ARABIC_AUDIO_SERVICE" not in progressive: fail("progressive word replay is not routed through AudioService")
@@ -95,14 +75,18 @@ if re.search(r"\brender\s*=\s*function", custom): fail("custom-corpus still over
 ok("AI Corpus no longer owns a redundant global render wrapper")
 
 pager=read("arabic/sentence-pager.js")
-if "arabicFallbackHtml" not in pager or "data-speak-ar" not in pager:
-    fail("AI Corpus fallback tokenization contract is missing")
+if "arabicFallbackHtml" not in pager or "data-speak-ar" not in pager: fail("AI Corpus fallback tokenization contract is missing")
 ok("AI Corpus has fallback tokenization for tappable Arabic words")
 
 word_depth=read("arabic/course-word-depth.js")
-for marker in ("3 Forms","Full Conjugation Table","Current Form"):
+for marker in ("1 · Pronunciation","2 · Meaning","3 · Dictionary Form / Root · Stem","4 · Full Conjugation Table","4 · 3 Forms · Arabic Case","5 · Deeper Information","nominalCurrentCell","Current Form"):
     if marker not in word_depth: fail(f"course word-depth interaction contract missing marker: {marker}")
-ok("course progressive word-depth contract is present")
+ok("Course five-stage word-depth and current-form highlighting contract is present")
+
+declension=read("arabic/word-declension.js")
+for marker in ("مَكْتَبَة","replace(/^ال[َُِّْ]*/","gender,number"):
+    if marker not in declension: fail(f"nominal normalization/coverage contract missing: {marker}")
+ok("vocalized definite nominals normalize to audited dictionary entries")
 
 verb=read("arabic/verb-conjugation-full.js")
 for pronoun in ("أَنَا","نَحْنُ","أَنْتَ","أَنْتِ","أَنْتُمَا","أَنْتُمْ","أَنْتُنَّ","هُوَ","هِيَ","هُمْ","هُنَّ"):
