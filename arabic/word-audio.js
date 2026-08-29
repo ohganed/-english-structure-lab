@@ -48,13 +48,13 @@ const st=document.createElement('style');
 st.textContent='.word,.courseWord,[data-speak-ar]{cursor:pointer;touch-action:manipulation}.wordSpeaking{background:#dcefe9!important;box-shadow:0 0 0 2px rgba(31,111,97,.16);transition:background .15s,box-shadow .15s}.wordAudioHint{font-size:11px;color:#75807c;margin-top:8px}';
 document.head.appendChild(st);
 
-// Capture phase keeps pronunciation working even when later progressive-disclosure handlers stop propagation.
 document.addEventListener('click',function(ev){
   const el=ev.target.closest?.('.word[data-w],.courseWord[data-course-word],[data-speak-ar]');
   if(!el)return;
   const text=el.dataset?.speakAr||textForWordElement(el);
   if(!text)return;
-  speakArabic(text,el.classList.contains('courseWord')?.68:.70);
+  const rate=el.classList.contains('courseWord') ? .68 : .70;
+  speakArabic(text,rate);
   flash(el);
 },true);
 
