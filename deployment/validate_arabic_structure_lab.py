@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -15,20 +16,28 @@ def ok(message: str) -> None:
     print(f"[PASS] {message}")
 
 def read(path: str) -> str:
-    p = ROOT / path
+    p=ROOT/path
     if not p.exists(): fail(f"missing required file: {path}")
-    return p.read_text(encoding="utf-8", errors="replace")
+    return p.read_text(encoding="utf-8",errors="replace")
 
 required_files=["arabic/index.html","arabic/course-mode.js","arabic/custom-corpus.js","arabic/audio-service.js","arabic/word-audio.js","arabic/sentence-pager.js","arabic/progressive-word.js","arabic/deep-analysis-audited.js","arabic/deep-audit-pack2.js","arabic/deep-audit-fixes.js","arabic/deep-audit-nominals.js","arabic/deep-audit-nominal-aliases.js","arabic/word-declension.js","arabic/verb-conjugation-full.js","arabic/course-word-depth.js","arabic/language-mode.js","arabic/service-worker.js","arabic/a1-batch1.js","arabic/a1-batch2.js","arabic/a1-batch3.js","arabic/a1-expansion.js",".github/workflows/pages.yml"]
 for f in required_files: read(f)
 ok("critical Arabic runtime files exist")
 
-# A1 must remain a first-class built-in course with all 750 experiences.
-a1_text="\n".join(read(f) for f in ("arabic/a1-batch1.js","arabic/a1-batch2.js","arabic/a1-batch3.js","arabic/a1-expansion.js"))
-a1_ids=re.findall(r"\['a1e(\d{3})'",a1_text)
-if len(a1_ids)!=750: fail(f"A1 built-in course count changed: expected 750, found {len(a1_ids)}")
-if a1_ids[0] != "001" or a1_ids[-1] != "750": fail("A1 built-in course range must remain a1e001–a1e750")
-ok("A1 built-in course contains 750 experiences")
+# Evaluate A1 exactly as the browser does, including generated expansion items.
+node_code=r'''
+const fs=require('fs'),vm=require('vm'); global.window=global;
+for(const f of ['arabic/a1-batch1.js','arabic/a1-batch2.js','arabic/a1-batch3.js','arabic/a1-expansion.js']) vm.runInThisContext(fs.readFileSync(f,'utf8'),{filename:f});
+const all=[window.ARABIC_A1_BATCH1,window.ARABIC_A1_BATCH2,window.ARABIC_A1_BATCH3,window.ARABIC_A1_EXPANSION].flatMap(x=>x?.experiences||[]);
+console.log(JSON.stringify({count:all.length,first:all[0]?.[0],last:all.at(-1)?.[0]}));
+'''
+r=subprocess.run(["node","-e",node_code],cwd=ROOT,text=True,capture_output=True)
+if r.returncode!=0: fail("could not evaluate A1 course runtime: "+r.stderr.strip())
+m=re.search(r'\{"count":(\d+),"first":"([^"]+)","last":"([^"]+)"\}',r.stdout)
+if not m: fail("could not parse evaluated A1 course result")
+count,first,last=int(m.group(1)),m.group(2),m.group(3)
+if (count,first,last)!=(750,"a1e001","a1e750"): fail(f"A1 runtime course invalid: count={count}, first={first}, last={last}")
+ok("A1 built-in course evaluates to 750 experiences")
 
 pages=read(".github/workflows/pages.yml")
 if "<script src=\"./deep-analysis-engine.js\"" in pages: fail("legacy deep-analysis-engine.js is still injected into production")
