@@ -39,27 +39,38 @@ function setVoice(id){
   }catch(e){}
   return chooseVoice();
 }
+function teachingText(text){
+  const t=clean(text);
+  if(!t)return t;
+  // Many Arabic system voices apply pause pronunciation to an isolated word and
+  // suppress a final short vowel. A short carrier keeps the target away from
+  // utterance-final position. The carrier is only for teaching-mode playback.
+  return `${t} الآنَ`;
+}
 function speak(text,opts={}){
   text=clean(text);
   if(!text||!('speechSynthesis' in window)||typeof SpeechSynthesisUtterance==='undefined')return false;
   const rate=Number.isFinite(opts.rate)?opts.rate:.70;
+  const mode=opts.mode||'natural';
+  const speechText=mode==='teaching'?teachingText(text):text;
   try{window.speechSynthesis.resume()}catch(e){}
   try{window.speechSynthesis.cancel()}catch(e){}
-  const u=new SpeechSynthesisUtterance(text);
+  const u=new SpeechSynthesisUtterance(speechText);
   const voice=opts.voice||chooseVoice();
   if(voice){u.voice=voice;u.lang=voice.lang||'ar-SA'}else u.lang='ar-SA';
   u.rate=rate;u.pitch=1;
   try{window.speechSynthesis.speak(u);return true}catch(e){return false}
 }
+function speakWord(text,opts={}){return speak(text,{...opts,mode:'teaching',rate:Number.isFinite(opts.rate)?opts.rate:.68})}
+function speakSentence(text,opts={}){return speak(text,{...opts,mode:'natural'})}
 function preview(id,text='مَرْحَبًا، كَيْفَ حَالُكَ الْيَوْمَ؟'){
-  const v=voices().find(x=>voiceId(x)===id);return speak(text,{rate:.74,voice:v||null});
+  const v=voices().find(x=>voiceId(x)===id);return speakSentence(text,{rate:.74,voice:v||null});
 }
 function stop(){try{window.speechSynthesis?.cancel?.()}catch(e){}}
 function currentVoice(){const v=chooseVoice();return v?{id:voiceId(v),name:v.name,lang:v.lang,voiceURI:v.voiceURI||''}:null}
-const service={speak,stop,clean,chooseVoice,voices,voiceId,selectedId,setVoice,preview,currentVoice};
+const service={speak,speakWord,speakSentence,stop,clean,teachingText,chooseVoice,voices,voiceId,selectedId,setVoice,preview,currentVoice};
 window.ARABIC_AUDIO_SERVICE=Object.freeze(service);
-window.ARABIC_SPEAK_WORD=(text,rate=.70)=>speak(text,{rate});
-// Bridge every legacy教材 call that still uses the original global speak().
-// This is intentionally assigned after index.html has defined its legacy function.
-try{window.speak=(text,rate)=>speak(text,{rate:Number.isFinite(rate)?rate:.70})}catch(e){}
+window.ARABIC_SPEAK_WORD=(text,rate=.68)=>speakWord(text,{rate});
+// Legacy sentence playback remains natural. Word taps are routed by word-audio.js.
+try{window.speak=(text,rate)=>speakSentence(text,{rate:Number.isFinite(rate)?rate:.70})}catch(e){}
 })();
