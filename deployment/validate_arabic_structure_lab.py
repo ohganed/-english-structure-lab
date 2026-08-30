@@ -9,7 +9,7 @@ def read(p):
     f=ROOT/p
     if not f.exists(): fail(f'missing required file: {p}')
     return f.read_text(encoding='utf-8',errors='replace')
-required=['arabic/index.html','arabic/course-mode.js','arabic/custom-corpus.js','arabic/ai-corpus-normalizer.js','arabic/ai-corpus-word-panel.js','arabic/audio-service.js','arabic/word-audio.js','arabic/sentence-pager.js','arabic/progressive-word.js','arabic/deep-analysis-audited.js','arabic/deep-audit-pack2.js','arabic/deep-audit-fixes.js','arabic/deep-audit-nominals.js','arabic/deep-audit-nominal-aliases.js','arabic/word-declension.js','arabic/verb-conjugation-full.js','arabic/verb-conjugation-corpus-pack.js','arabic/course-word-depth.js','arabic/language-mode.js','arabic/service-worker.js','arabic/a1-batch1.js','arabic/a1-batch2.js','arabic/a1-batch3.js','arabic/a1-expansion.js','.github/workflows/pages.yml']
+required=['arabic/index.html','arabic/course-mode.js','arabic/custom-corpus.js','arabic/ai-corpus-normalizer.js','arabic/ai-corpus-word-panel.js','arabic/audio-service.js','arabic/word-audio.js','arabic/sentence-pager.js','arabic/progressive-word.js','arabic/deep-analysis-audited.js','arabic/deep-audit-pack2.js','arabic/deep-audit-fixes.js','arabic/deep-audit-nominals.js','arabic/deep-audit-nominal-aliases.js','arabic/word-declension.js','arabic/verb-conjugation-full.js','arabic/verb-conjugation-corpus-pack.js','arabic/course-word-depth.js','arabic/language-mode.js','arabic/service-worker.js','arabic/a1-batch1.js','arabic/a1-batch2.js','arabic/a1-batch3.js','arabic/a1-expansion.js','arabic/a1-chapters.js','.github/workflows/pages.yml']
 for f in required: read(f)
 ok('critical Arabic runtime files exist')
 node=r'''const fs=require('fs'),vm=require('vm');global.window=global;for(const f of ['arabic/a1-batch1.js','arabic/a1-batch2.js','arabic/a1-batch3.js','arabic/a1-expansion.js'])vm.runInThisContext(fs.readFileSync(f,'utf8'),{filename:f});const all=[window.ARABIC_A1_BATCH1,window.ARABIC_A1_BATCH2,window.ARABIC_A1_BATCH3,window.ARABIC_A1_EXPANSION].flatMap(x=>x&&x.experiences||[]);console.log(JSON.stringify({count:all.length,last:all.length?all[all.length-1][0]:null}));'''
@@ -22,7 +22,13 @@ pages=read('.github/workflows/pages.yml')
 if '<script src="./deep-analysis-engine.js"' in pages or re.search(r'\barabic/deep-analysis-engine\.js\b',pages): fail('legacy Deep Analysis engine is still in production')
 idx=[x.strip() for x in pages.splitlines() if 'sed -i' in x and '_site/arabic/index.html' in x]
 if len(idx)!=1: fail('Arabic production index injection must be unique')
-order=re.findall(r'<script src="\./([^"]+)"></script>',idx[0]);req=['custom-corpus.js','ai-corpus-normalizer.js','audio-service.js','word-audio.js','sentence-pager.js','library-compat.js','progressive-word.js','deep-analysis-audited.js','deep-audit-pack2.js','deep-audit-fixes.js','deep-audit-nominals.js','deep-audit-nominal-aliases.js','word-declension.js','verb-conjugation-full.js','verb-conjugation-corpus-pack.js','ai-corpus-word-panel.js','course-mode.js','course-word-depth.js','language-mode.js']
+order=re.findall(r'<script src="\./([^"]+)"></script>',idx[0])
+a1_prod=['a1-batch1.js','a1-batch2.js','a1-batch3.js','a1-expansion.js','a1-chapters.js']
+if any(x not in order for x in a1_prod): fail('A1 course assets are not eagerly loaded in production')
+if [order.index(x) for x in a1_prod]!=sorted(order.index(x) for x in a1_prod): fail('A1 production asset order is invalid')
+if any(order.index(x)>order.index('course-mode.js') for x in a1_prod): fail('A1 assets must load before Course Mode')
+ok('A1 course assets are eagerly loaded before Course Mode')
+req=['custom-corpus.js','ai-corpus-normalizer.js','audio-service.js','word-audio.js','sentence-pager.js','library-compat.js','progressive-word.js','deep-analysis-audited.js','deep-audit-pack2.js','deep-audit-fixes.js','deep-audit-nominals.js','deep-audit-nominal-aliases.js','word-declension.js','verb-conjugation-full.js','verb-conjugation-corpus-pack.js','ai-corpus-word-panel.js','course-mode.js','course-word-depth.js','language-mode.js']
 if len(order)!=len(set(order)) or any(x not in order for x in req) or [order.index(x) for x in req]!=sorted(order.index(x) for x in req): fail('production script order invalid')
 ok('production script order is deterministic and dependency-safe')
 normalizer=read('arabic/ai-corpus-normalizer.js')
