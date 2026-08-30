@@ -26,6 +26,7 @@ jobs:
       - name: Validate Arabic Structure Lab
         run: |
           python3 deployment/validate_arabic_structure_lab.py .
+          node deployment/validate_course_lexicon.js
           for f in \
             arabic/custom-corpus.js \
             arabic/ai-corpus-normalizer.js \
