@@ -1,4 +1,4 @@
-const CACHE='arabic-structure-lab-v0.4.16';
+const CACHE='arabic-structure-lab-v0.4.17';
 const CORE=['./','./index.html','./manifest.webmanifest','./icon.svg'];
 
 self.addEventListener('install',event=>{
@@ -19,7 +19,7 @@ self.addEventListener('fetch',event=>{
   if(req.method!=='GET')return;
   const url=new URL(req.url);
   if(url.origin!==self.location.origin)return;
-  const isFreshCritical=req.mode==='navigate'||/\/arabic\/(?:index\.html|course-mode\.js|audio-service\.js|audio-voice-selector\.js|word-audio\.js|sentence-pager\.js|custom-corpus\.js|ai-corpus-normalizer\.js|ai-corpus-word-panel\.js|language-mode\.js|cefr-curriculum\.js|deep-analysis[^/]*\.js|deep-audit[^/]*\.js|nominal[^/]*\.js|word-declension\.js|verb-conjugation-full\.js|verb-conjugation-corpus-pack\.js|course-word-depth\.js|a1-[^/]*\.js)(?:\?.*)?$/.test(url.pathname+url.search);
+  const isFreshCritical=req.mode==='navigate'||/\/arabic\/(?:index\.html|course-mode\.js|course-lexicon-pack\.js|course-lexicon-bridge\.js|audio-service\.js|audio-voice-selector\.js|word-audio\.js|sentence-pager\.js|custom-corpus\.js|ai-corpus-normalizer\.js|ai-corpus-word-panel\.js|language-mode\.js|cefr-curriculum\.js|deep-analysis[^/]*\.js|deep-audit[^/]*\.js|nominal[^/]*\.js|word-declension\.js|verb-conjugation-full\.js|verb-conjugation-corpus-pack\.js|course-word-depth\.js|a1-[^/]*\.js)(?:\?.*)?$/.test(url.pathname+url.search);
   if(isFreshCritical){
     event.respondWith((async()=>{
       try{const fresh=await fetch(req,{cache:'no-store'});if(fresh&&fresh.ok){const cache=await caches.open(CACHE);cache.put(req,fresh.clone())}return fresh}
