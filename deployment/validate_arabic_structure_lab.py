@@ -16,23 +16,23 @@ def ok(message: str) -> None:
 
 def read(path: str) -> str:
     p = ROOT / path
-    if not p.exists():
-        fail(f"missing required file: {path}")
+    if not p.exists(): fail(f"missing required file: {path}")
     return p.read_text(encoding="utf-8", errors="replace")
 
-required_files = [
-    "arabic/index.html","arabic/course-mode.js","arabic/custom-corpus.js","arabic/audio-service.js","arabic/word-audio.js",
-    "arabic/sentence-pager.js","arabic/progressive-word.js","arabic/deep-analysis-audited.js","arabic/deep-audit-pack2.js",
-    "arabic/deep-audit-fixes.js","arabic/deep-audit-nominals.js","arabic/deep-audit-nominal-aliases.js","arabic/word-declension.js",
-    "arabic/verb-conjugation-full.js","arabic/course-word-depth.js","arabic/language-mode.js","arabic/service-worker.js",
-    ".github/workflows/pages.yml",
-]
+required_files=["arabic/index.html","arabic/course-mode.js","arabic/custom-corpus.js","arabic/audio-service.js","arabic/word-audio.js","arabic/sentence-pager.js","arabic/progressive-word.js","arabic/deep-analysis-audited.js","arabic/deep-audit-pack2.js","arabic/deep-audit-fixes.js","arabic/deep-audit-nominals.js","arabic/deep-audit-nominal-aliases.js","arabic/word-declension.js","arabic/verb-conjugation-full.js","arabic/course-word-depth.js","arabic/language-mode.js","arabic/service-worker.js","arabic/a1-batch1.js","arabic/a1-batch2.js","arabic/a1-batch3.js","arabic/a1-expansion.js",".github/workflows/pages.yml"]
 for f in required_files: read(f)
 ok("critical Arabic runtime files exist")
 
-pages = read(".github/workflows/pages.yml")
+# A1 must remain a first-class built-in course with all 750 experiences.
+a1_text="\n".join(read(f) for f in ("arabic/a1-batch1.js","arabic/a1-batch2.js","arabic/a1-batch3.js","arabic/a1-expansion.js"))
+a1_ids=re.findall(r"\['a1e(\d{3})'",a1_text)
+if len(a1_ids)!=750: fail(f"A1 built-in course count changed: expected 750, found {len(a1_ids)}")
+if a1_ids[0] != "001" or a1_ids[-1] != "750": fail("A1 built-in course range must remain a1e001–a1e750")
+ok("A1 built-in course contains 750 experiences")
+
+pages=read(".github/workflows/pages.yml")
 if "<script src=\"./deep-analysis-engine.js\"" in pages: fail("legacy deep-analysis-engine.js is still injected into production")
-if re.search(r"\barabic/deep-analysis-engine\.js\b", pages): fail("legacy deep-analysis-engine.js is still copied into the production artifact")
+if re.search(r"\barabic/deep-analysis-engine\.js\b",pages): fail("legacy deep-analysis-engine.js is still copied into the production artifact")
 ok("legacy Deep Analysis engine is excluded from production")
 
 index_lines=[line.strip() for line in pages.splitlines() if "sed -i" in line and "_site/arabic/index.html" in line]
@@ -58,12 +58,12 @@ if "SpeechSynthesisUtterance" in word_audio or "speechSynthesis.speak" in word_a
 ok("word taps use the centralized AudioService")
 
 course=read("arabic/course-mode.js")
-for marker in ("courseSentenceWord","sentenceHtml","data-course-word","Arabic · tap any word"):
-    if marker not in course: fail(f"Course sentence-word interaction missing: {marker}")
+for marker in ("courseSentenceWord","sentenceHtml","data-course-word","Arabic · tap any word","A1 Course","ARABIC_COURSE_OPEN","openCourse('A1')"):
+    if marker not in course: fail(f"Course interaction/A1 entry missing: {marker}")
 if "ARABIC_AUDIO_SERVICE" not in course: fail("Course audio is not routed through AudioService")
 if "SpeechSynthesisUtterance" in course or "speechSynthesis.speak" in course: fail("Course bypasses AudioService")
 if "querySelectorAll('[data-course-word]').forEach(b=>b.onclick" in course: fail("Course still owns a duplicate per-word audio click handler")
-ok("Course sentence words are directly interactive without duplicate audio handlers")
+ok("A1 direct entry and sentence-word interaction are present")
 
 progressive=read("arabic/progressive-word.js")
 if "ARABIC_AUDIO_SERVICE" not in progressive: fail("progressive word replay is not routed through AudioService")
@@ -71,7 +71,7 @@ if "SpeechSynthesisUtterance" in progressive or "speechSynthesis.speak" in progr
 ok("progressive word replay uses AudioService")
 
 custom=read("arabic/custom-corpus.js")
-if re.search(r"\brender\s*=\s*function", custom): fail("custom-corpus still overrides global render")
+if re.search(r"\brender\s*=\s*function",custom): fail("custom-corpus still overrides global render")
 ok("AI Corpus no longer owns a redundant global render wrapper")
 
 pager=read("arabic/sentence-pager.js")
@@ -79,14 +79,15 @@ if "arabicFallbackHtml" not in pager or "data-speak-ar" not in pager: fail("AI C
 ok("AI Corpus has fallback tokenization for tappable Arabic words")
 
 word_depth=read("arabic/course-word-depth.js")
-for marker in ("1 · Pronunciation","2 · Meaning","3 · Dictionary Form / Root · Stem","4 · Full Conjugation Table","4 · 3 Forms · Arabic Case","5 · Deeper Information","nominalCurrentCell","Current Form"):
-    if marker not in word_depth: fail(f"course word-depth interaction contract missing marker: {marker}")
-ok("Course five-stage word-depth and current-form highlighting contract is present")
+for marker in ("Pronunciation","Meaning","Dictionary Form · Stem · Root","Grammar","Conjugation Table","Case Table","Current Form","nominalCurrentCell","ARABIC_WORD_PANEL_OPEN"):
+    if marker not in word_depth: fail(f"full word-panel contract missing marker: {marker}")
+if "count=Math.min" in word_depth: fail("word panel still requires repeated taps to reach inflection data")
+ok("one-tap full word analysis and current-form highlighting are present")
 
 declension=read("arabic/word-declension.js")
-for marker in ("مَكْتَبَة","replace(/^ال[َُِّْ]*/","gender,number"):
-    if marker not in declension: fail(f"nominal normalization/coverage contract missing: {marker}")
-ok("vocalized definite nominals normalize to audited dictionary entries")
+for marker in ("مَكْتَبَة","Sound Masculine Plural","Sound Feminine Plural","Broken Plural","Nominative","Accusative","Genitive"):
+    if marker not in declension: fail(f"nominal declension contract missing: {marker}")
+ok("noun/adjective case tables cover audited singular and plural paradigms")
 
 verb=read("arabic/verb-conjugation-full.js")
 for pronoun in ("أَنَا","نَحْنُ","أَنْتَ","أَنْتِ","أَنْتُمَا","أَنْتُمْ","أَنْتُنَّ","هُوَ","هِيَ","هُمْ","هُنَّ"):
