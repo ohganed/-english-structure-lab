@@ -25,7 +25,8 @@ document.addEventListener('click',function(ev){
   const text=el.dataset?.speakAr||textForWordElement(el);
   if(!text)return;
   const rate=el.classList.contains('courseWord')?.68:.70;
-  window.ARABIC_AUDIO_SERVICE?.speak?.(text,{rate});
+  const svc=window.ARABIC_AUDIO_SERVICE;
+  if(svc?.speakWord)svc.speakWord(text,{rate});else svc?.speak?.(text,{rate});
   flash(el);
 },true);
 })();
