@@ -1,4 +1,4 @@
-const CACHE='arabic-structure-lab-v0.4.13';
+const CACHE='arabic-structure-lab-v0.4.14';
 const CORE=['./','./index.html','./manifest.webmanifest','./icon.svg'];
 
 self.addEventListener('install',event=>{
