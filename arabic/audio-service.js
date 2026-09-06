@@ -40,12 +40,11 @@ function setVoice(id){
   return chooseVoice();
 }
 function teachingText(text){
-  const t=clean(text);
-  if(!t)return t;
-  // Many Arabic system voices apply pause pronunciation to an isolated word and
-  // suppress a final short vowel. A short carrier keeps the target away from
-  // utterance-final position. The carrier is only for teaching-mode playback.
-  return `${t} الآنَ`;
+  // Word playback must contain ONLY the visible/contextual word form.
+  // Never append an audible carrier word: learners need the token exactly as it
+  // appears in the sentence. Device voices may realize pause endings differently,
+  // but adding extra spoken material is worse because it changes the target sound.
+  return clean(text);
 }
 function speak(text,opts={}){
   text=clean(text);
@@ -71,6 +70,5 @@ function currentVoice(){const v=chooseVoice();return v?{id:voiceId(v),name:v.nam
 const service={speak,speakWord,speakSentence,stop,clean,teachingText,chooseVoice,voices,voiceId,selectedId,setVoice,preview,currentVoice};
 window.ARABIC_AUDIO_SERVICE=Object.freeze(service);
 window.ARABIC_SPEAK_WORD=(text,rate=.68)=>speakWord(text,{rate});
-// Legacy sentence playback remains natural. Word taps are routed by word-audio.js.
 try{window.speak=(text,rate)=>speakSentence(text,{rate:Number.isFinite(rate)?rate:.70})}catch(e){}
 })();
