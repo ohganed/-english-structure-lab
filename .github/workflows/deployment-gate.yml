@@ -20,6 +20,7 @@ jobs:
         run: |
           python deployment/validate_arabic_structure_lab.py .
           for f in \
+            arabic/knowledge-base.js \
             arabic/custom-corpus.js \
             arabic/word-audio.js \
             arabic/sentence-pager.js \
