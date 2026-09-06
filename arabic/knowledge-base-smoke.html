@@ -1,0 +1,17 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Arabic KB Smoke Test</title><style>body{font:15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;max-width:760px;margin:40px auto;padding:0 18px;line-height:1.6}pre{white-space:pre-wrap;background:#f4f4f4;padding:14px;border-radius:12px}.pass{color:#176b45}.fail{color:#a02b2b}</style></head><body><h1>Arabic Knowledge Base v0.1 Smoke Test</h1><div id="result"></div><pre id="log"></pre><script src="./knowledge-base.js"></script><script>
+(function(){
+const out=[],assert=(name,ok,detail='')=>{out.push({name,ok,detail});if(!ok)throw new Error(name+(detail?': '+detail:''))};
+try{
+  const KB=window.ARABIC_KB;assert('API exists',!!KB);
+  KB.clear();
+  const doc={schemaVersion:'1.1',title:'Smoke',originalText:'ذَهَبْتُ إلى المدرسة.',sentences:[{text:'ذَهَبْتُ إلى المدرسة.',words:[{id:'w1',surface:'ذَهَبْتُ',vocalized:'ذَهَبْتُ',lemma:'ذَهَبَ',lemmaVocalized:'ذَهَبَ',root:'ذ ه ب',partOfSpeech:{en:'Verb',ja:'動詞'},meaning:{en:'I went',ja:'私は行った'},pattern:{formNumber:'I'},wordFamily:[]},{id:'w2',surface:'إلى',vocalized:'إِلَى',lemma:'إِلَى',partOfSpeech:{en:'Preposition'},meaning:{en:'to',ja:'〜へ'}}]}]};
+  const r=KB.ingestDocument(doc);assert('Document ingested',r.added>=2,JSON.stringify(r));
+  const hit=KB.lookup('ذَهَبْتُ');assert('Surface lookup',hit?.lemma==='ذَهَبَ',JSON.stringify(hit));
+  const vocalizedHit=KB.lookup('ذَهَبَ');assert('Lemma lookup',vocalizedHit?.root==='ذ ه ب');
+  const ctx=KB.promptContext('غدًا ذَهَبْتُ إلى السوق.');assert('Prompt context contains cached lemma',ctx.includes('ذَهَبَ'));
+  const stats=KB.stats();assert('Stats populated',stats.entries>=2,JSON.stringify(stats));
+  document.querySelector('#result').innerHTML='<h2 class="pass">PASS</h2><p>Knowledge cache, lookup, normalization, and prompt reuse are working in this browser.</p>';
+}catch(e){out.push({name:'Exception',ok:false,detail:e.message});document.querySelector('#result').innerHTML='<h2 class="fail">FAIL</h2><p>'+e.message+'</p>'}
+document.querySelector('#log').textContent=out.map(x=>(x.ok?'PASS ':'FAIL ')+x.name+(x.detail?' — '+x.detail:'')).join('\n');
+})();
+</script></body></html>
