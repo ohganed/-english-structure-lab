@@ -9,7 +9,7 @@ def read(p):
     f=ROOT/p
     if not f.exists(): fail(f'missing required file: {p}')
     return f.read_text(encoding='utf-8',errors='replace')
-required=['arabic/index.html','arabic/course-mode.js','arabic/custom-corpus.js','arabic/ai-corpus-normalizer.js','arabic/ai-corpus-word-panel.js','arabic/audio-service.js','arabic/word-audio.js','arabic/sentence-pager.js','arabic/progressive-word.js','arabic/deep-analysis-audited.js','arabic/deep-audit-pack2.js','arabic/deep-audit-fixes.js','arabic/deep-audit-nominals.js','arabic/deep-audit-nominal-aliases.js','arabic/word-declension.js','arabic/verb-conjugation-full.js','arabic/verb-conjugation-corpus-pack.js','arabic/course-word-depth.js','arabic/language-mode.js','arabic/service-worker.js','arabic/a1-batch1.js','arabic/a1-batch2.js','arabic/a1-batch3.js','arabic/a1-expansion.js','arabic/a1-chapters.js','.github/workflows/pages.yml']
+required=['arabic/index.html','arabic/course-mode.js','arabic/knowledge-base.js','arabic/custom-corpus.js','arabic/ai-corpus-normalizer.js','arabic/ai-corpus-word-panel.js','arabic/audio-service.js','arabic/word-audio.js','arabic/sentence-pager.js','arabic/progressive-word.js','arabic/deep-analysis-audited.js','arabic/deep-audit-pack2.js','arabic/deep-audit-fixes.js','arabic/deep-audit-nominals.js','arabic/deep-audit-nominal-aliases.js','arabic/word-declension.js','arabic/verb-conjugation-full.js','arabic/verb-conjugation-corpus-pack.js','arabic/course-word-depth.js','arabic/language-mode.js','arabic/service-worker.js','arabic/a1-batch1.js','arabic/a1-batch2.js','arabic/a1-batch3.js','arabic/a1-expansion.js','arabic/a1-chapters.js','.github/workflows/pages.yml']
 for f in required: read(f)
 ok('critical Arabic runtime files exist')
 node=r'''const fs=require('fs'),vm=require('vm');global.window=global;for(const f of ['arabic/a1-batch1.js','arabic/a1-batch2.js','arabic/a1-batch3.js','arabic/a1-expansion.js'])vm.runInThisContext(fs.readFileSync(f,'utf8'),{filename:f});const all=[window.ARABIC_A1_BATCH1,window.ARABIC_A1_BATCH2,window.ARABIC_A1_BATCH3,window.ARABIC_A1_EXPANSION].flatMap(x=>x&&x.experiences||[]);console.log(JSON.stringify({count:all.length,last:all.length?all[all.length-1][0]:null}));'''
@@ -28,9 +28,18 @@ if any(x not in order for x in a1_prod): fail('A1 course assets are not eagerly 
 if [order.index(x) for x in a1_prod]!=sorted(order.index(x) for x in a1_prod): fail('A1 production asset order is invalid')
 if any(order.index(x)>order.index('course-mode.js') for x in a1_prod): fail('A1 assets must load before Course Mode')
 ok('A1 course assets are eagerly loaded before Course Mode')
-req=['custom-corpus.js','ai-corpus-normalizer.js','audio-service.js','word-audio.js','sentence-pager.js','library-compat.js','progressive-word.js','deep-analysis-audited.js','deep-audit-pack2.js','deep-audit-fixes.js','deep-audit-nominals.js','deep-audit-nominal-aliases.js','word-declension.js','verb-conjugation-full.js','verb-conjugation-corpus-pack.js','ai-corpus-word-panel.js','course-mode.js','course-word-depth.js','language-mode.js']
+req=['knowledge-base.js','custom-corpus.js','ai-corpus-normalizer.js','audio-service.js','word-audio.js','sentence-pager.js','library-compat.js','progressive-word.js','deep-analysis-audited.js','deep-audit-pack2.js','deep-audit-fixes.js','deep-audit-nominals.js','deep-audit-nominal-aliases.js','word-declension.js','verb-conjugation-full.js','verb-conjugation-corpus-pack.js','ai-corpus-word-panel.js','course-mode.js','course-word-depth.js','language-mode.js']
 if len(order)!=len(set(order)) or any(x not in order for x in req) or [order.index(x) for x in req]!=sorted(order.index(x) for x in req): fail('production script order invalid')
+if order.index('knowledge-base.js')>order.index('custom-corpus.js'): fail('Knowledge Base must load before custom corpus')
 ok('production script order is deterministic and dependency-safe')
+kb=read('arabic/knowledge-base.js')
+for x in ('asl.knowledge.v1','ingestDocument','ingestExistingAICorpus','promptContext','KNOWN LEXICAL FACTS','case/iʿrāb','window.ARABIC_KB'):
+    if x not in kb: fail(f'Knowledge Base contract missing: {x}')
+ok('reusable lexical Knowledge Base contract is present')
+custom=read('arabic/custom-corpus.js')
+for x in ('ARABIC_KB?.ingestDocument','ARABIC_KB?.promptContext','known words reused'):
+    if x not in custom: fail(f'AI Corpus Knowledge Base integration missing: {x}')
+ok('AI Corpus reuses cached lexical facts without caching sentence grammar')
 normalizer=read('arabic/ai-corpus-normalizer.js')
 for x in ('repairOffsets','text.indexOf(surface,cursor)','w.start=pos','w.end=pos+surface.length','oldValidate'):
     if x not in normalizer: fail(f'AI Corpus offset repair missing: {x}')
