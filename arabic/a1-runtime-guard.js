@@ -1,7 +1,9 @@
 (function(){
+  const rowsOf=x=>Array.isArray(x)?x:(x?.experiences||[]);
+  const rowId=r=>Array.isArray(r)?r[0]:(r?.id||r?.experienceId||r?.experience_id||null);
   function allA1(){
     return [window.ARABIC_A1_BATCH1,window.ARABIC_A1_BATCH2,window.ARABIC_A1_BATCH3,window.ARABIC_A1_EXPANSION]
-      .flatMap(x=>x?.experiences||[]);
+      .flatMap(rowsOf);
   }
   function chapterIds(){return (window.ARABIC_A1_CHAPTERS||[]).map(c=>c.id)}
   function audit(){
@@ -9,7 +11,10 @@
     const expected={0:'a1e001',49:'a1e050',50:'a1e051',99:'a1e100',100:'a1e101',149:'a1e150',150:'a1e151',199:'a1e200',749:'a1e750'};
     const bad=[];
     if(all.length!==750)bad.push(`count=${all.length}`);
-    for(const [i,id] of Object.entries(expected))if(all[+i]?.[0]!==id)bad.push(`${+i+1}:${all[+i]?.[0]||'missing'}!=${id}`);
+    for(const [i,id] of Object.entries(expected)){
+      const got=rowId(all[+i]);
+      if(got!==id)bad.push(`${+i+1}:${got||'missing'}!=${id}`);
+    }
     for(const id of ['A1.1','A1.2','A1.3','A1.4'])if(!chapterIds().includes(id))bad.push(`chapter ${id} missing`);
     return {ok:bad.length===0,count:all.length,bad};
   }
