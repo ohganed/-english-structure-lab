@@ -1,0 +1,30 @@
+(function(){
+const L=window.ARABIC_COURSE_LEXICON;if(!L?.entries||!L?.normalize)return;
+const E=L.entries,n=L.normalize;
+const add=(forms,en,ja,pos='Word',lemma=null)=>forms.forEach(f=>E[n(f)]={surface:f,en,ja,pos,lemma:lemma||f,confidence:'Course curated'});
+// Final unresolved forms from the 4,500-experience meaning audit.
+add(['بِـعَلِيّ'],'with Ali / to Ali','アリーと・アリーに','Preposition + Proper Noun','عَلِيّ');
+add(['بِـمَرْيَم'],'with Maryam / to Maryam','マリアムと・マリアムに','Preposition + Proper Noun','مَرْيَم');
+add(['بِـأَحْمَد'],'with Ahmad / to Ahmad','アフマドと・アフマドに','Preposition + Proper Noun','أَحْمَد');
+add(['بِـلَيْلَى'],'with Layla / to Layla','ライラと・ライラに','Preposition + Proper Noun','لَيْلَى');
+add(['بِـسَارَة'],'with Sarah / to Sarah','サーラと・サーラに','Preposition + Proper Noun','سَارَة');
+add(['بِـعُمَر'],'with Omar / to Omar','ウマルと・ウマルに','Preposition + Proper Noun','عُمَر');
+add(['تُفَّاح','تُفَّاحًا'],'apple / apples','りんご','Noun','تُفَّاح');
+add(['جُبْن','جُبْنًا'],'cheese','チーズ','Noun','جُبْن');
+add(['حَلِيب','حَلِيبًا'],'milk','牛乳','Noun','حَلِيب');
+add(['خُبْز','خُبْزًا'],'bread','パン','Noun','خُبْز');
+add(['شَاي','شَايًا'],'tea','お茶','Noun','شَاي');
+add(['عَصِير','عَصِيرًا'],'juice','ジュース','Noun','عَصِير');
+add(['قَهْوَة','قَهْوَةً'],'coffee','コーヒー','Noun','قَهْوَة');
+add(['مَاء','مَاءً'],'water','水','Noun','مَاء');
+add(['مَوْز','مَوْزًا'],'banana / bananas','バナナ','Noun','مَوْز');
+add(['تَعْبَانُ'],'tired','疲れている','Adjective','تَعْبَان');
+add(['جَائِعٌ'],'hungry','お腹がすいている','Adjective','جَائِع');
+add(['سَعِيدٌ'],'happy','うれしい・幸せな','Adjective','سَعِيد');
+add(['عَطْشَانُ'],'thirsty','喉が渇いている','Adjective','عَطْشَان');
+add(['أَبْيَضُ'],'white','白い','Adjective','أَبْيَض');
+add(['أَحْمَرُ'],'red','赤い','Adjective','أَحْمَر');
+add(['أَخْضَرُ'],'green','緑の','Adjective','أَخْضَر');
+add(['أَزْرَقُ'],'blue','青い','Adjective','أَزْرَق');
+add(['أَسْوَدُ'],'black','黒い','Adjective','أَسْوَد');
+})();
