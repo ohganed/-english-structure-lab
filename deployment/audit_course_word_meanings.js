@@ -3,7 +3,7 @@ global.window=global;
 const load=f=>vm.runInThisContext(fs.readFileSync(f,'utf8'),{filename:f});
 for(const f of [
   'arabic/a1-batch1.js','arabic/a1-batch2.js','arabic/a1-batch3.js','arabic/a1-expansion.js','arabic/a1-chapters.js','arabic/cefr-curriculum.js',
-  'arabic/word-declension.js','arabic/course-lexicon-pack.js','arabic/course-lexicon-pack2.js','arabic/course-lexicon-bridge.js','arabic/verb-conjugation-full.js','arabic/verb-conjugation-corpus-pack.js'
+  'arabic/word-declension.js','arabic/course-lexicon-pack.js','arabic/course-lexicon-pack2.js','arabic/course-lexicon-pack3.js','arabic/course-lexicon-bridge.js','arabic/verb-conjugation-full.js','arabic/verb-conjugation-corpus-pack.js'
 ]) load(f);
 
 const punct=/^[«“\[(]+|[.،؟!?؛:»”\])]+$/g;
