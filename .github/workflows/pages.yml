@@ -28,6 +28,7 @@ jobs:
           python3 deployment/validate_arabic_structure_lab.py .
           node deployment/validate_a1_boundaries.js
           node deployment/validate_course_lexicon.js
+          node deployment/audit_course_word_meanings.js
           for f in \
             arabic/a1-runtime-guard.js \
             arabic/knowledge-base.js \
