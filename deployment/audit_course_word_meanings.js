@@ -3,7 +3,7 @@ global.window=global;
 const load=f=>vm.runInThisContext(fs.readFileSync(f,'utf8'),{filename:f});
 for(const f of [
   'arabic/a1-batch1.js','arabic/a1-batch2.js','arabic/a1-batch3.js','arabic/a1-expansion.js','arabic/a1-chapters.js','arabic/cefr-curriculum.js',
-  'arabic/word-declension.js','arabic/course-lexicon-pack.js','arabic/course-lexicon-pack2.js','arabic/course-lexicon-pack3.js','arabic/course-lexicon-bridge.js','arabic/verb-conjugation-full.js','arabic/verb-conjugation-corpus-pack.js'
+  'arabic/word-declension.js','arabic/course-lexicon-pack.js','arabic/course-lexicon-pack2.js','arabic/course-lexicon-pack3.js','arabic/course-lexicon-pack4.js','arabic/course-lexicon-bridge.js','arabic/verb-conjugation-full.js','arabic/verb-conjugation-corpus-pack.js'
 ]) load(f);
 
 const punct=/^[«“\[(]+|[.،؟!?؛:»”\])]+$/g;
@@ -49,4 +49,5 @@ const report={experiences:rows.length,totalTokens,uniqueTokens:uniqueAll,resolve
 fs.mkdirSync('deployment/reports',{recursive:true});
 fs.writeFileSync('deployment/reports/course-word-meaning-audit.json',JSON.stringify(report,null,2));
 if(rows.length!==4500){console.error(`[FAIL] expected 4500 experiences, got ${rows.length}`);process.exit(1)}
-console.log('[PASS] full A1-C2 course meaning audit completed');
+if(uniqueUnresolved!==0){console.error(`[FAIL] expected 100% Course meaning coverage, unresolved=${uniqueUnresolved}`);process.exit(1)}
+console.log('[PASS] full A1-C2 course meaning audit completed at 100% coverage');
